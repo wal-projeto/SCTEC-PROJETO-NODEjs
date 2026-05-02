@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "ms-vsliveshare.vsliveshare",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "streetsidesoftware.code-spell-checker-portuguese-brazilian",
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig",
+        "IronGeek.vscode-env",
+        "eamodio.gitlens"
+    ]
+}
