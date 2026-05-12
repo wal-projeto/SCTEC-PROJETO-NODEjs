@@ -62,8 +62,8 @@ async function buscarEndereco(cep) {
     }
 }
 
-//buscarEndereco('88032090'); // Meu endereço em Florianópolis
-buscarEndereco('88032099');
+buscarEndereco('88032090'); // Meu endereço em Florianópolis
+//buscarEndereco('88032099');
 
 
 /*

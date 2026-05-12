@@ -85,6 +85,9 @@ for (const fruta of listaDeFrutas) {
 console.log('');
 console.log('');
 
+
+
+
 ////////////////////////
 // 2) JavaScript intermediário
 ////////////////////////
@@ -203,14 +206,6 @@ lado da linha que falhou, facilitando muito o debug!/*
 */
 
 
-
-
-
-
-
-
-
-
 // Classes
     class Usuario {
         constructor(nome, email) {
@@ -228,6 +223,9 @@ lado da linha que falhou, facilitando muito o debug!/*
     console.log('');
 
 
+
+
+    
     
     //////////////////////////
     // 3) JavaScript avançado
