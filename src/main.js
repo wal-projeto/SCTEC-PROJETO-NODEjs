@@ -1,14 +1,17 @@
 /** 
-"start": "node ./src/main.js" : Para executar o código: npm start
- salvar essas alterações no VS Code, não esqueça de avisar o Git:
- - git add package.json
- - git commit -m "docs: atualizando dados do repositório no package.json"
+ - instalar o Node.js (no WSL/Linux): sudo apt install nodejs npm
+- Verifique se funcionou: node -v  e  npm -v
+- Instalação: Após instalar o Node, rodar este comando dentro 
+da pasta do seu projeto:  npm install
+- package.json - "start": "node ./src/main.js" : 
+- Para executar o código: npm start
+- Ao salvar alterações no VS Code subir no GitHub:
+ - git add .
+ - git commit -m " xxxx "
  - git push origin featureSCTEC
 */
-
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
-
 import { adicao } from "./services/adicao.js";
 
 async function main() {
