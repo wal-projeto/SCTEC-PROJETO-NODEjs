@@ -1,3 +1,10 @@
+/**AGORA TENHO 2 BRANCHs:
+ * ESTOU NA main, para mudar para a featureSCTEC
+ * escrevo no terminal:
+ * git checkout featureSCTEC
+ */
+
+
 //READLINE PROMISES: https://nodejs.org/api/readline.html#readlinepromises
 const readlinePromises = require("node:readline/promises"); // Importação correta para Promises
 const { stdin, stdout } = require("node:process"); // Importa a entrada e saída padrão do processo
