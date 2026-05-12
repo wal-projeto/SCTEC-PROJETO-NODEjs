@@ -1,3 +1,11 @@
+/** 
+"start": "node ./src/main.js" : Para executar o código: npm start
+ salvar essas alterações no VS Code, não esqueça de avisar o Git:
+ - git add package.json
+ - git commit -m "docs: atualizando dados do repositório no package.json"
+ - git push origin featureSCTEC
+*/
+
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
 

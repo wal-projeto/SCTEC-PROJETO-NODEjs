@@ -1,5 +1,5 @@
 {
-  "name": "repositorio-teste",
+  "name": "minha-api-sctec",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -12,7 +12,7 @@
     "url": "git@github-senai.com:marcomoura-senai/repositorio-teste.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Walquiria de Oliveira",
   "license": "ISC",
   "type": "module"
 }
