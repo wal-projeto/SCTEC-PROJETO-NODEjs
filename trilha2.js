@@ -1,4 +1,13 @@
 /**
+ * 
+ * SHIT + ALT + A = COMENTA UM BLOCO DE CODIGO
+* COTROL + ; = COMENTA A LINHA
+* para executar este código, use o comando: node index.js ou node ./ 
+ * CTROL + ALT + I : ABRE O CHATGPT
+ * 
+ * 
+ * 
+ * 
  * Você é o Arquiteto de Software de uma nova Fintech. 
  * A empresa vai lançar uma carteira multi-moedas que suporta Real (BRL), Bitcoin (BTC) e Ethereum (ETH). Cada moeda tem um fator de fracionamento diferente na vida real:
  * BRL (Centavos): 2 casas decimais 
@@ -42,6 +51,8 @@ const wallet = {
 };
 
 /**
+ * 
+ * 
  * 3. Processador de Transações
  */
 

@@ -1,0 +1,22 @@
+{
+  "name": "sctec-projeto-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node ./main.js" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wal-projeto/SCTEC-PROJETO-NODEjs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/wal-projeto/SCTEC-PROJETO-NODEjs/issues"
+  },
+  "homepage": "https://github.com/wal-projeto/SCTEC-PROJETO-NODEjs#readme"
+}
