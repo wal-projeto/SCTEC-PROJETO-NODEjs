@@ -1,3 +1,5 @@
+
+console.log(this);
 /** 
  - instalar o Node.js (no WSL/Linux): sudo apt install nodejs npm
 - Verifique se funcionou: node -v  e  npm -v
@@ -16,6 +18,7 @@ da pasta do seu projeto:  npm install
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
 import { adicao } from "./services/adicao.js";
+import { subtracao } from "./services/subtracao.js";
 
 async function main() {
   const interfaceConsole = createInterface(stdin, stdout);
@@ -48,6 +51,8 @@ async function main() {
         console.log(`O resultado da operação é: ${resultado}`);
         break;
       case "-":
+        const resultado1 = subtracao(a,b) 
+        console.log(`O resultado da operação é: ${resultado1}`);
         break;
       case "*":
         break;
@@ -71,11 +76,16 @@ async function main() {
 
 main().catch(console.log);
 /**1. main(): Invoca a função principal que é async e faz com que retorne automaticamente uma
- * Promise(de que o código vai rodar no futuro)
+ * Promise(promessa de que o código vai rodar no futuro)
  * 2 .catch(...) : método nativo usado exclusivamente para lidar com Promises rejeitadas
  * (que falharam). Se qualquer erro acontecer dentro da função main(), e não for tratado lá dentro, 
  * a Promise é "rejeitada" e o .catch entra em ação imediatamente para capturar essa falha.
- */
+ 3. . (console.log) : Aqui há um truque de escrita curta do JavaScript (chamado de passagem por referência). Em vez de escrever a forma longa:
+ .catch(function(error) {
+  console.log(error);
+})
+
+*/
 
 
 
