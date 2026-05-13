@@ -5,6 +5,9 @@
 da pasta do seu projeto:  npm install
 - package.json - "start": "node ./src/main.js" : 
 - Para executar o código: npm start
+- Ctrol + c : Libera o  terminal 
+- Ctrol + Shift + P = abra a paleta de comandos
+- Ctrol + ' = abre o terminal
 - Ao salvar alterações no VS Code subir no GitHub:
  - git add .
  - git commit -m " xxxx "
@@ -17,38 +20,90 @@ import { adicao } from "./services/adicao.js";
 async function main() {
   const interfaceConsole = createInterface(stdin, stdout);
 
-  const respostaOperação = await interfaceConsole.question(
-    "Digite a operação:\n", // \n - Quebra de linha
-  );
+  try {
 
-  const aString = await interfaceConsole.question("Digite o primeiro número: \n");
-  const bString = await interfaceConsole.question("Digite o segundo número: \n"); // string -> texto
+    const respostaOperacao = await interfaceConsole.question(
+      "Digite a operação:  \n");
+
+    const operacoesValidas = ["+","-","*","/"];
+    if(!operacoesValidas.includes(respostaOperacao.trim())) {
+      throw new Error(`Operação inválida: ${respostaOperacao}.   ` + `Operações admitidas:  +,- ,*,/ `);
+    }
 
 
-  const a = aString // transforme
-  const b = bString // transforme
+    const aString = await  interfaceConsole.question("Digite o primeiro número: \n");
+    const bString = await interfaceConsole.question("Digite o segundo número: \n");
 
-  // 1- Fazer a transformação para número -> Caso o usuário não digite um número, jogue um erro
-  // 2- Criar as outras operações uma em cada arquivo e importar
-  // BÔNUS: Resolver o problema do console preso quando a aplicação dá erro.
+    const a = Number(aString );
+    const b = Number(bString); 
 
-  switch (respostaOperação) {
-    case "+":
-      const resposta = adicao(aString, bString);
-      console.log(`Resposta da operação: ${resposta}`);
-      break;
-    case "-":
-      break;
-    case "*":
-      break;
-    case "/":
-      break;
+    // Lançando um erro manualmente se o Number() retornar NaN
+    if(isNaN(a) || isNaN(b)) {
+      throw new Error("Digite apenas números válidos.");
+    };
 
-    default:
-      throw new Error(`Não suportamos essa operação`);
+  switch (respostaOperacao.trim()) {
+      case "+":
+        const resultado = adicao(a,b) // passando os num. já convertidos
+        console.log(`O resultado da operação é: ${resultado}`);
+        break;
+      case "-":
+        break;
+      case "*":
+        break;
+      case "/":
+        break;
+
+      default:
+        throw new Error("Operação admitidas: + , - , * , /");
   }
+  } catch (error){
+    // Tratamento de erro, captura qualquer erro que aconteça no bloco try
+    // console.error("ERRO DURANTE A EXECUÇÃO!");
+    console.error(`${error.message}`); 
+    // Template Strings: as variáveis só funcionam dentro de textos se você utilizamos as crases ( ` ` )
 
-  interfaceConsole.close();
+
+  } finally {
+    interfaceConsole.close();
+  } // BÔNUS: Resolver o problema do console preso quando a aplicação dá erro.
 }
 
 main().catch(console.log);
+/**1. main(): Invoca a função principal que é async e faz com que retorne automaticamente uma
+ * Promise(de que o código vai rodar no futuro)
+ * 2 .catch(...) : método nativo usado exclusivamente para lidar com Promises rejeitadas
+ * (que falharam). Se qualquer erro acontecer dentro da função main(), e não for tratado lá dentro, 
+ * a Promise é "rejeitada" e o .catch entra em ação imediatamente para capturar essa falha.
+ */
+
+
+
+
+
+
+/** Problema do Console Preso:
+ * A estrutura atual do seu código utiliza o trio completo de tratamento 
+ * de erros: try, catch e finally.
+ 
+ * try {
+  // Código que pode dar erro...
+} catch (error) {
+  // Trata o erro se ele acontecer...
+} finally {
+  // ESTE BLOCO SEMPRE EXECUTA!
+  interfaceConsole.close(); 
+}
+
+ * O bloco finally possui uma regra absoluta no JavaScript: ele sempre 
+ * será executado, não importa o que aconteça antes.
+ * 
+ * 1. Se o código do try rodar perfeitamente até o fim -> o finally executa e fecha o console.
+ * 
+ * 2. Se o código do try falhar e disparar um erro -> o código pula para o catch, exibe a 
+ * mensagem de erro e, logo em seguida, entra no finally para fechar o console.
+ * 
+ * Colocar o .close() dentro do finally garantiu uma blindagem para a aplicação. Independentemente 
+ * de o usuário digitar os números certos ou causar um erro grave, o Node.js sempre receberá a 
+ * instrução de encerrar a interface de entrada e saída, liberando o terminal do usuário imediatamente.
+ */
