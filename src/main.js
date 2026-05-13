@@ -1,5 +1,4 @@
 
-console.log(this);
 /** 
  - instalar o Node.js (no WSL/Linux): sudo apt install nodejs npm
 - Verifique se funcionou: node -v  e  npm -v
@@ -19,21 +18,21 @@ import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada p
 import { createInterface } from "node:readline/promises";
 import { adicao } from "./services/adicao.js";
 import { subtracao } from "./services/subtracao.js";
+import { multiplicacao } from "./services/multiplicacao.js";
+import { divisao } from "./services/divisao.js";
 
 async function main() {
   const interfaceConsole = createInterface(stdin, stdout);
 
   try {
-
     const respostaOperacao = await interfaceConsole.question(
       "Digite a operação:  \n");
 
     const operacoesValidas = ["+","-","*","/"];
     if(!operacoesValidas.includes(respostaOperacao.trim())) {
-      throw new Error(`Operação inválida: ${respostaOperacao}.   ` + `Operações admitidas:  +,- ,*,/ `);
+      throw new Error(`Operação inválida: ${respostaOperacao} ` + ` Operações admitidas -->>>  + , - , * , /  `);
     }
-
-
+ 
     const aString = await  interfaceConsole.question("Digite o primeiro número: \n");
     const bString = await interfaceConsole.question("Digite o segundo número: \n");
 
@@ -50,13 +49,20 @@ async function main() {
         const resultado = adicao(a,b) // passando os num. já convertidos
         console.log(`O resultado da operação é: ${resultado}`);
         break;
+
       case "-":
         const resultado1 = subtracao(a,b) 
         console.log(`O resultado da operação é: ${resultado1}`);
         break;
+
       case "*":
+        const resultado2 = multiplicacao(a,b)
+        console.log(resultado2)
         break;
+
       case "/":
+        const resultado3 = divisao(a,b)
+        console.log(resultado3)
         break;
 
       default:
@@ -73,6 +79,7 @@ async function main() {
     interfaceConsole.close();
   } // BÔNUS: Resolver o problema do console preso quando a aplicação dá erro.
 }
+
 
 main().catch(console.log);
 /**1. main(): Invoca a função principal que é async e faz com que retorne automaticamente uma

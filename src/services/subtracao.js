@@ -1,3 +1,3 @@
-export function subtracao(){
+export function subtracao(a,b){
     return (a - b)
 }
