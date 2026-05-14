@@ -31,7 +31,7 @@ async function main() {
     const operacoesValidas = ["+","-","*","/"];
     if(!operacoesValidas.includes(respostaOperacao.trim())) {
       throw new Error(`Operação inválida: ${respostaOperacao} ` + ` Operações admitidas -->>>  + , - , * , /  `);
-    }
+    } // esta invertendo a resposta de for false para que entre no if(){ executa se for verdade}
  
     const aString = await  interfaceConsole.question("Digite o primeiro número: \n");
     const bString = await interfaceConsole.question("Digite o segundo número: \n");
