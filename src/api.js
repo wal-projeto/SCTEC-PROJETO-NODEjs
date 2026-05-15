@@ -27,7 +27,7 @@ async function buscarUsuario(username) {
   const controlador = new AbortController();
   
   // 2. Define um timer para cancelar após 5 segundos (5000 milissegundos)
-  const timerTimeout = setTimeout(() => controlador.abort(), 30000);
+  const timerTimeout = setTimeout(() => controlador.abort(), 5000);
 
 
   try {
