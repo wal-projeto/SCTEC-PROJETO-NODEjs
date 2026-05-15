@@ -6,6 +6,7 @@
 da pasta do seu projeto:  npm install
 - package.json - "start": "node ./src/main.js" : 
 - Para executar o código: npm start
+
 - Ctrol + c : Libera o  terminal 
 - Ctrol + Shift + P = abra a paleta de comandos
 - Ctrol + ' = abre o terminal
