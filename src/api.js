@@ -9,14 +9,21 @@ OU
 RODAR DIRETO PELO TERMINAL:
 node ./src/service/api.js
 
- * 
- */
+Para limpar a rede do seu terminal, execute estes dois comandos no terminal 
+do Ubuntu antes de rodar o programa:
+# 1. Limpa o cache de DNS do Linux
+sudo resolvectl flush-caches
 
+# 2. Desliga o cache de requisições temporárias do Node
+export NODE_OPTIONS=""
+ */
+setDefaultAutoSelectFamilyAttemptTimeout
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
 import { writeFile, readFile } from "node:fs/promises"; // file-system
 
-
+import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
+setDefaultAutoSelectFamilyAttemptTimeout(500); // Força o fetch a pular o IPv6 travado do WSL em 500ms
 
 async function buscarUsuario(username) {
   const urlBase = "https://api.github.com/users/";
@@ -39,7 +46,8 @@ async function buscarUsuario(username) {
     method: 'GET',
     signal: controlador.signal, // Adicionado o signal para o AbortController funcionar
     headers: {
-      'User-Agent': 'Node-Fetch-App'
+      'Accept': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' // Simula um navegador real
     }
     });
 
@@ -73,10 +81,21 @@ async function buscarUsuario(username) {
 
 
 
+
 async function lerArquivo() {
   try {
     const usuariosText = await readFile("./database.json", {encoding: "utf-8",});
-    return JSON.parse(usuariosText);
+  
+    // Se o arquivo estiver vazio, JSON.parse pode falhar ou retornar null/undefined
+    if (!usuariosText.trim()) {
+      return [];
+    }
+   
+    const dados= JSON.parse(usuariosText);
+
+    // Garante que o retorno seja SEMPRE um array, mesmo se o JSON for null
+    return Array.isArray(dados) ? dados : [];
+
 
   } catch (error) {
     //  Se o arquivo não existir (ENOENT), retorna um array vazio de forma segura
@@ -96,30 +115,29 @@ async function lerArquivo() {
  */
 
 
-async function salvarArquivo(usuario) {
-  const usuarios = await lerArquivo();
 
-  //  Validação para NÃO salvar usuários repetidos (Regra do projeto)
-  const usuarioJaExiste = usuarios.some(u => u.login.toLowerCase() === usuario.login.toLowerCase());
 
+async function salvarArquivo(novoUsuario) {
+  const usuariosExistentes = await lerArquivo(); // chamando larArquivo (Encapsulamento) para carregar a Lista atual do aquivo
+
+    //  Validação para NÃO salvar usuários repetidos
+    const usuarioJaExiste = usuariosExistentes.some(u => u.login.toLowerCase() === novoUsuario.login.toLowerCase());
     if (usuarioJaExiste) {
-    console.log(`\n⚠️ Atenção: O usuário "${usuario.login}" já está salvo no banco de dados!`);
-    return; // Para a execução e não salva de novo
+    console.log(`\n⚠️ Atenção: O usuário "${novoUsuario.login}" já está salvo no banco de dados!`);
+    return; // Retorna para a execução e não salva de novo
   }
+  //adicionando um novo usuário no final da lista e grava essa lista atualizada
+  //Esta alteração acontece apenas na memória RAM do computador até este momento
+  usuariosExistentes.push(novoUsuario);
 
-  usuarios.push(usuario);
-
-  if (!usuarios) {
-    await writeFile(`./database.json`, JSON.stringify([usuario]), {
-      encoding: "utf-8",
-    });
-  }
-
-  usuarios.push(usuario)
- await writeFile(`./database.json`, JSON.stringify(usuarios, null, 2), {encoding: "utf-8", });
-
-  console.log(`\n💾 Usuário "${usuario.login}" salvo com sucesso!`);
-
+  // Gravação física no arquivo
+  //JSON.stringify(usuarios, null, 2): Converte o array de objetos JavaScript em texto formato JSON
+  //O null, 2 serve para quebrar linhas e aplicar 2 espaços de indentação, deixando o arquivo database.json organizado e fácil de ler
+  await writeFile(`./database.json`, JSON.stringify(usuariosExistentes, null, 2), {encoding: "utf-8", });
+  //await writeFile(...): Substitui todo o conteúdo antigo do arquivo database.json pelo novo texto atualizado
+  
+  console.log(`\n💾 Usuário "${novoUsuario.login}" salvo com sucesso!`);
+  
 }
 
 
@@ -160,6 +178,7 @@ async function main() {
       // callstack -> stacktrace
     }
 
+
   // Central de tratamento de erros reais
   } catch (erro) {
     console.log("\n=========================");
@@ -168,8 +187,8 @@ async function main() {
     if (erro.message.includes("demorou demais") || (erro.cause && erro.cause.code === 'UND_ERR_CONNECT_TIMEOUT')) {
       console.error("❌ Erro de Rede: Tempo limite esgotado. Verifique sua conexão ou tente novamente.");
     } else {
-      // Exibe "Este usuário não existe no GitHub." ou outras falhas
-      console.error("❌ Falha no Sistema: " + erro.message);
+      // Este usuário não existe no GitHub  ou outras falhas
+      console.error("❌ Falha no Sistema :  "  + erro.message);
     }
     
     console.log("=========================");
