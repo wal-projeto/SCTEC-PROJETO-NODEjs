@@ -25,6 +25,8 @@ import { writeFile, readFile } from "node:fs/promises"; // file-system
 import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
 setDefaultAutoSelectFamilyAttemptTimeout(500); // Força o fetch a pular o IPv6 travado do WSL em 500ms
 
+
+
 async function buscarUsuario(username) {
   const urlBase = "https://api.github.com/users/";
 
@@ -84,17 +86,23 @@ async function buscarUsuario(username) {
 
 async function lerArquivo() {
   try {
+    // Busca os dados com segurança da Heap
     const usuariosText = await readFile("./database.json", {encoding: "utf-8",});
   
     // Se o arquivo estiver vazio, JSON.parse pode falhar ou retornar null/undefined
     if (!usuariosText.trim()) {
+      console.log(" 📭 Nenhum usuário salvo no banco de dados ainda.");
       return [];
     }
    
     const dados= JSON.parse(usuariosText);
 
-    // Garante que o retorno seja SEMPRE um array, mesmo se o JSON for null
-    return Array.isArray(dados) ? dados : [];
+    // Se for um array, o .filter() remove os elementos null e limpa o seu arquivo automaticamente
+    if (Array.isArray(dados)) {
+      return dados.filter(u => u !== null && u !== undefined);
+    }
+    
+    return [];
 
 
   } catch (error) {
@@ -121,7 +129,7 @@ async function salvarArquivo(novoUsuario) {
   const usuariosExistentes = await lerArquivo(); // chamando larArquivo (Encapsulamento) para carregar a Lista atual do aquivo
 
     //  Validação para NÃO salvar usuários repetidos
-    const usuarioJaExiste = usuariosExistentes.some(u => u.login.toLowerCase() === novoUsuario.login.toLowerCase());
+    const usuarioJaExiste = usuariosExistentes.some(u => u && u.login && u.login.toLowerCase() === novoUsuario.login.toLowerCase());
     if (usuarioJaExiste) {
     console.log(`\n⚠️ Atenção: O usuário "${novoUsuario.login}" já está salvo no banco de dados!`);
     return; // Retorna para a execução e não salva de novo
@@ -143,6 +151,55 @@ async function salvarArquivo(novoUsuario) {
 
 
 
+async function usuarioEspecifico(interfaceConsole) {
+      const lerAquivo = await lerArquivo();
+
+      if (lerAquivo.length === 0) {
+        console.log("\n📭 Não há usuários salvos no banco de dados para buscar.");
+      } else {
+        console.log("\n=================================");
+        console.log("  SELECIONE UM USUÁRIO DA LISTA  ");
+        console.log("=================================");
+        
+        // Exibe apenas a lista de logins numerada para o usuário escolher
+        // o .forEach mapeando apenas a propriedade u.login associada a um índice 
+        // amigável (index + 1). Descarta varreduras de texto complexas na memória.
+        lerAquivo.forEach((u, index) => {
+          if (u && u.login) {
+            console.log(`  [ ${index + 1} ] ${u.login}`);
+          }
+        });
+        console.log("=================================");
+
+
+        const escolhaNumero = await interfaceConsole.question("\nDigite o número do usuário que deseja buscar:\n");
+        // Converte a string digitada para número inteiro
+        const indiceSelecionado = parseInt(escolhaNumero, 10) - 1;
+
+        // Valida se o índice existe dentro das posições válidas do array
+        if (isNaN(indiceSelecionado) || indiceSelecionado < 0 || indiceSelecionado >= lerAquivo.length) {
+          console.log("\n❌ Opção inválida! Selecione um número válido da lista.");
+        } else {
+          const usuarioEncontrado = lerAquivo[indiceSelecionado];
+
+          console.log("\n=================================");
+          console.log(`  DADOS DE: ${usuarioEncontrado.login.toUpperCase()} `);
+          console.log("=================================");
+          
+          // Filtra para exibir em formato JSON chave/valor limpo
+          const dadosExibicao = {
+            id: usuarioEncontrado.id,
+            login: usuarioEncontrado.login,
+            name: usuarioEncontrado.name || "Não informado!"
+          };
+
+          console.log(JSON.stringify(dadosExibicao, null, 2));
+          console.log("=================================");
+        }
+      }
+    }
+
+
 
 
 async function main() {
@@ -150,19 +207,23 @@ async function main() {
   
   try {
     // INTERFACE DE USUÁRIO (CLI): Cabeçalho informativo
-    console.log("=========================");
-    console.log("           MENU         ");
-    console.log("=========================");
-    console.log(" INSTRUÇÕES DE USO:");
-    console.log(" • Digite um username válido do GitHub");
-    console.log(" • ");
-    console.log("==========================\n");
+    console.log("===============================");
+    console.log("           MENU                ");
+    console.log("===============================");
+    console.log("       INSTRUÇÕES DE USO:      ");
+    console.log("  [ 1 ] Buscar e Salvar Usuário ");
+    console.log("  [ 2 ] Listar Usuários Salvos ");
+    console.log("  [ 3 ] Buscar um usuário especifico ");
+    console.log("=============================\n");
 
-    const respostaOperação = await interfaceConsole.question(
-      "Digite o usuário:\n", // \n - Quebra de linha
-    );
+    const opcao = await interfaceConsole.question("Escola uma opção ( 1 , 2 , 3):\n ");
 
-    // O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
+
+    // Busca usuário no GitHub e Salva no arquivo database.json
+    if(opcao === "1") {
+      const respostaOperação = await interfaceConsole.question("Digite o usuário:\n");
+
+    // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
     const usuario = await buscarUsuario(respostaOperação);
 
      //Só executa estas linhas se a busca acima der 100% certo
@@ -176,10 +237,34 @@ async function main() {
     if(desejaSalvar.toLocaleLowerCase() ==='s') {
       await salvarArquivo(usuario); 
       // callstack -> stacktrace
+    } else{
+      return
+    }
     }
 
 
-  // Central de tratamento de erros reais
+    if (opcao === "2"){
+      const lerAquivoTerminal = await lerArquivo();
+      
+      if (lerAquivoTerminal.length === 0) {
+        console.log("\n📭 O arquivo database.json está vazio.");
+      } else {
+        console.log("\nLista de Usuários no Arquivo database.json:");
+        // JSON.stringify(dados, substituto, espaços) transforma o array em texto formatado
+        console.log(JSON.stringify(lerAquivoTerminal, null, 2));
+      }
+    }
+
+
+    // DENTRO DA FUNÇÃO MAIN:
+    if (opcao === "3") {
+      // O 'await' impede o 'pending' e passamos a interfaceConsole para dentro da função
+      await usuarioEspecifico(interfaceConsole); 
+    }
+
+
+
+  // Central de tratamento de erros reais da função main()
   } catch (erro) {
     console.log("\n=========================");
     
@@ -193,28 +278,23 @@ async function main() {
     
     console.log("=========================");
 
-
+    // Finalização do programa dentro da função main()
   }finally {
     // É obrigatório para encerrar manualmente a interface, independente do código ter funcionado ou não
       interfaceConsole.close();
       console.log("\n Sessão encerrada.");
-
-  } 
-  /**
+  }
+ /**
   - Se você não fechar esse canal manualmente com interfaceConsole.close(),
-    o terminal do Linux ficará congelado para sempre, esperando que o 
-    usuário digite algo.
+    o terminal do Linux ficará congelado para sempre, esperando que o usuário digite algo.
   - O finally na main garante que, mesmo se o programa quebrar no meio do 
-    caminho, o teclado seja liberado e o terminal seja encerrado com 
-    segurança.
+    caminho, o teclado seja liberado e o terminal seja encerrado com segurança.
   - As funções buscarUsuario, lerArquivo e salvarArquivo não precisam de
    um bloco finally porque elas não deixam recursos do sistema abertos 
   na memória após terminarem de rodar.
   */
 }
-
 main()
-//.catch(console.log);
 
 /**- Estrutura unificada: Todo o fluxo acontece ordenadamente dentro do main().
  * - Captura real de erros: Como buscarUsuario é um processo assíncrono (await),
