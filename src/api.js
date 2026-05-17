@@ -4,6 +4,20 @@
  * "scripts": {
     "start": "node ./src/api.js"
 }
+- Ctrol + c : Libera o  terminal 
+- Ctrol + Shift + P = abra a paleta de comandos
+- Ctrol + ' = abre o terminal
+- Ao salvar alterações no VS Code subir no GitHub:
+ - git add .
+ - git commit -m " xxxx "
+ - git push origin featureSCTEC
+ 
+ 1. Garanta que as informações dele estão atualizadas
+git fetch upstream
+
+2. Vá para a sua branch onde quer colocar os arquivos
+git checkout featureSCTEC
+
 RODAR COM: npm start 
 OU 
 RODAR DIRETO PELO TERMINAL:
