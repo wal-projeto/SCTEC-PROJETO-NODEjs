@@ -16,7 +16,9 @@
 git fetch upstream
 
 2. Vá para a sua branch onde quer colocar os arquivos
+git checkout main
 git checkout featureSCTEC
+git checkout EstudoJavaScript
 
 RODAR COM: npm start 
 OU 
@@ -53,12 +55,19 @@ import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada p
 import { createInterface } from "node:readline/promises";
 import { clienteController } from "./src/controllers";
 
+
 // Importações dos pedaços de código de outras pastas
 import { buscarUsuario} from "./repositories/githubRepository.js"
 import { salvarArquivo } from "./services/userServices.js";
-import { usuraioEspecifico } from "./controllers/clienteController.js";
+import { usuarioEspecifico } from "./controllers/clienteController.js";
+import { lerArquivo } from "./repositories/fileRepository.js";
 
-async function main() { const interfaceConsole = createInterface(stdin, stdout);
+
+
+async function main() { const interfaceConsole = createInterface({
+   input: stdin,  
+  output: stdout,  
+});
 
   try {
     // INTERFACE DE USUÁRIO (CLI)
@@ -71,7 +80,7 @@ async function main() { const interfaceConsole = createInterface(stdin, stdout);
     console.log("  [ 3 ] Buscar um usuário especifico no Banco      ");
     console.log("=================================================\n");
 
-    const opcao = await interfaceConsole.question("Escola uma opção ( 1 , 2 , 3):\n ");
+    const opcao = await interfaceConsole.question("Escolha uma opção ( 1 , 2 , 3):\n ");
 
 
     // Busca usuário no GitHub e Salva no arquivo database.json
