@@ -16,6 +16,9 @@ setDefaultAutoSelectFamilyAttemptTimeout(500); // Força o fetch a pular o IPv6 
 export async function buscarUsuario(username) { 
   const urlBase = "https://api.github.com/users/";
 
+  //  ADICIONE ESTA LINHA ABAIXO:
+  const controlador = new AbortController();
+
   // 1. Cria um controlador para conseguir cancelar a requisição
   // Se a rede do WSL travar a requisição, o AbortController corta a conexão em 5 segundos em vez de deixar o terminal congelado por 10 ou mais segundos.
   // 2. Define um timer para cancelar após 5 segundos (5000 milissegundos)

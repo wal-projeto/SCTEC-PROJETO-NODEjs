@@ -45,15 +45,23 @@ export NODE_OPTIONS=""
 ├── api.js (Este será meu arquivo principal/main)
 └── database.json
 
+MINHA TERCEIRA BRANCH COM MATERIAIS DE ESTUDO: 
+git push -u origin EstudoJavaScript
+ * O termo -u origin serve para conectar a sua branch local diretamente com o GitHub. 
+ * Nas próximas vezes que quiser enviar alterações dessa branch, bastará digitar apenas:
+ * > git push.
+ * git checkout EstudoJavaScript <-COMANDO PARA IR A ELA
 
 arquivo raiz original agora só serve para iniciar o terminal e direcionar para as funções corretas conforme a escolha do menu
 Ficou no arquivo principal apenas para ligar o terminal e chamar o Controller de acordo com a opção (1, 2 ou 3). 
 */
 
-// api.js
+// api.js RODAR COM: npm start 
+// Buscar texto no código: Ctrol + F
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
-import { clienteController } from "./src/controllers";
+
+
 
 
 // Importações dos pedaços de código de outras pastas
@@ -90,7 +98,7 @@ async function main() { const interfaceConsole = createInterface({
     // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
     const usuario = await buscarUsuario(respostaOperação);
 
-     //Se usuario recebeu resposta da Função buscrUsuario, Mostrará na tela o Nome e o Username dele
+     //Se usuario recebeu resposta da Função buscarUsuario, Mostrará na tela o Nome e o Username dele
     console.log(`\nUsuário encontrado`);
     console.log(`Nome: ${usuario.name  || "Não informado!"}`);
     console.log(`Username: ${usuario.login}`);
