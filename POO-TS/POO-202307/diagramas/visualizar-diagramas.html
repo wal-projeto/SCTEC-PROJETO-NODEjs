@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POO-202307 — Diagramas</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: Segoe UI, sans-serif; background: #1e1e1e; color: #eee; margin: 24px; }
+    h1 { font-size: 1.4rem; }
+    h2 { margin-top: 2rem; color: #7ec8e3; border-bottom: 1px solid #444; padding-bottom: 8px; }
+    .mermaid { background: #2d2d2d; padding: 20px; border-radius: 8px; margin: 16px 0; }
+    p { color: #aaa; max-width: 720px; }
+  </style>
+</head>
+<body>
+  <h1>POO-202307 — Mapa visual (como ProjetoExecucao / ImportExport / Polimorfismo)</h1>
+  <p>Abra este arquivo no navegador (duplo clique). Objetos do seu index.js: <strong>samsung</strong> (Digital) e <strong>notebook</strong> (Fisico).</p>
+
+  <h2>1. ProjetoExecucao — quem chama quem (sequência)</h2>
+  <pre class="mermaid">
+sequenceDiagram
+    participant I as index.js
+    participant D as Digital
+    participant P as Produto
+    participant F as Fisico
+    participant E as Estoque
+    participant IE as ItemEstoque
+
+    Note over I: require() carrega classes
+    Note over I: app.listen(3001) sobe servidor
+
+    I->>D: new Digital('TV samsung', 4000)
+    D->>P: constructor de Produto roda
+    I->>D: samsung.get()
+
+    I->>F: new Fisico('notebook dell', 1000)
+    F->>P: constructor de Produto roda
+    I->>F: notebook.get()
+
+    I->>E: new Estoque([samsung, notebook])
+    E->>D: samsung.get() para pegar preco
+    E->>F: notebook.get() para pegar preco
+    I->>E: getValorTotal()
+
+    I->>IE: new ItemEstoque(notebook, 6)
+    I->>IE: notebookEstoque.get()
+  </pre>
+
+  <h2>2. ImportExport — require entre arquivos</h2>
+  <pre class="mermaid">
+flowchart TB
+    index["index.js"]
+    digital["digital.class.js"]
+    fisico["fisico.class.js"]
+    produto["produto.class.js"]
+    estoque["estoque.class.js"]
+    item["item-estoque.class.js"]
+
+    index -->|"require"| digital
+    index -->|"require"| fisico
+    index -->|"require"| estoque
+    index -->|"require"| item
+    digital -->|"require"| produto
+    fisico -->|"require"| produto
+  </pre>
+
+  <h2>3. Polimorfismo — mesma chamada, resultado diferente</h2>
+  <pre class="mermaid">
+flowchart TB
+    subgraph chamada ["Mesma chamada, comportamento diferente"]
+        E["estoque.getValorTotal()"]
+    end
+
+    E --> S["samsung.get()"]
+    E --> N["notebook.get()"]
+
+    S --> SR["nome, preco, link, promocional"]
+    N --> NR["nome, preco, endereco, total, promocional"]
+
+    subgraph promo ["valorPromocional()"]
+        SP["samsung: preco x 0.8"]
+        NP["notebook: preco x 1.1 x 0.8 com frete"]
+    end
+  </pre>
+
+  <h2>4. Herança (classes)</h2>
+  <pre class="mermaid">
+classDiagram
+    class Produto {
+        +nome
+        +preco
+        +valorPromocional()
+        +get()
+    }
+    class Digital {
+        +get()
+    }
+    class Fisico {
+        +calcularFrete()
+        +valorPromocional()
+        +get()
+    }
+    Produto <|-- Digital
+    Produto <|-- Fisico
+  </pre>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script>
+</body>
+</html>

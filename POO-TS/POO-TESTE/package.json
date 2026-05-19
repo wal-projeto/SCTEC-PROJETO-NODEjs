@@ -1,0 +1,10 @@
+{
+  "name": "poo-teste",
+  "version": "1.0.0",
+  "description": "Versão didática do POO-202307 para aprender JavaScript e POO",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

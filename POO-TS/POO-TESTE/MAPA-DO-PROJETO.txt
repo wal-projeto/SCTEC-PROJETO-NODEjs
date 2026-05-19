@@ -1,0 +1,202 @@
+================================================================================
+  MAPA LÓGICO — POO-TESTE (quem chama quem + conceitos de POO)
+================================================================================
+
+1) HIERARQUIA DE HERANÇA (quem herda de quem)
+
+// Diagrama de Herança (centralizado)
+
+                                     ┌─────────────────────────────┐
+                                     │         PRODUTO             │
+                                     ├─────────────────────────────┤
+                                     │ + nome                      │ ← CLASSE PAI (base)
+                                     │ + preco                     │
+                                     │ + verificarProduto()        │
+                                     │ + ligar()                   │
+                                     │ + valorPromocional()        │
+                                     │ + get()                     │
+                                     └────────────┬────────────────┘
+                                                  │ extends (herança: "É UM")
+                        ┌─────────────────────────┴─────────────────────────┐
+                        │ extends                                           │extends
+                ┌───────▼───────┐                                   ┌───────▼───────┐
+                │    DIGITAL    │                                   │    FISICO     │
+                ├───────────────┤           ← CLASSES FILHAS        ├───────────────┤
+                │ + get()       │                                   │ + calcularFrete() │
+                │               │                                   │ + valorPromocional() │ diferente
+                │               │                                   │ + get()             │
+                └───────────────┘                                   └───────────────┘
+
+--------------------------------------------------------------------------------
+
+  Digital É UM Produto         |   Fisico É UM Produto
+  (herdam nome, preco, ligar, valorPromocional — podem sobrescrever métodos)
+
+| Classe   | Relação com Produto | Significado                                      |
+|----------|---------------------|--------------------------------------------------|
+| Produto  | Classe pai (base)   | Molde geral: nome, preço, métodos comuns         |
+| Digital  | extends Produto     | Digital é um produto + link no get()             |
+| Fisico   | extends Produto     | Físico é um produto + frete e get() diferente    |
+
+Estoque e ItemEstoque não herdam de Produto — eles só usam objetos de produto dentro deles.
+
+
+
+2) COMPOSIÇÃO (quem "tem" quem — NÃO herda)
+
+// DIAGRAMA: Composição ("TEM" / "has-a")
+
+//                ┌────────────┐         ┌──────────────┐
+//                │  Estoque   │         │ ItemEstoque  │
+//                └────┬───────┘         └─────┬────────┘
+//                     │                         │
+//      ┌──────────────┼──────────────┐          │
+//      │                             │          │
+//  ┌───▼─────┐                  ┌────▼─────┐    │
+//  │ zelda   │                  │  xbox    │◄───┘
+//  │ Digital │                  │  Fisico  │
+//  └─────────┘                  └──────────┘
+//
+| Classe      | Tipo POO     | O que guarda                        |
+|-------------|--------------|-------------------------------------|
+| Estoque     | Composição   | Array [zelda, xbox]                 |
+| ItemEstoque | Composição   | Um produto + número (ex.: xbox, 3)  |
+
+// - Estoque TEM lista de produtos (ex: [zelda, xbox])
+// - ItemEstoque TEM 1 produto (ex: xbox) + quantidade
+
+--------------------------------------------------------------------------------
+
+3) QUEM CHAMA QUEM (fluxo ao rodar: node index.js)
+--------------------------------------------------------------------------------
+
+  index.js (((OLHAR O ARQUIVO ProjetoExecucao.jgp)))
+     │
+     ├─ require() ──► carrega Digital, Fisico, Estoque, ItemEstoque (só carrega, não executa)
+     │
+     └─ app.listen() ──► quando servidor sobe, executa:
+            │
+            ├─ new Digital('Zelda', 4)     → chama constructor de Produto (via herança)
+            │      └─ zelda.get()           → método get() de Digital
+            │
+            ├─ new Fisico('X-Box', 30)     → chama constructor de Produto
+            │      └─ xbox.get()            → método get() de Fisico
+            │
+            ├─ new Estoque([zelda, xbox])
+            │      └─ estoque.getValorTotal()
+            │            └─ para cada item: item.get().preco  ← POLIMORFISMO
+            │
+            └─ new ItemEstoque(xbox, 3)
+                   └─ xboxEstoque.get()
+                         └─ usa xbox.preco e quantidade
+
+
+Ordem resumida:
+
+1. index.js importa as classes (require) — só carrega, ainda não cria objetos.
+2. app.listen sobe o servidor.
+3. No callback: cria zelda, xbox, estoque, xboxEstoque.
+4. Cada console.log chama métodos dos objetos.
+
+Cadeia de IMPORT (arquivo importa arquivo):
+    index.js
+       ├── digital.class.js ──require──► produto.class.js
+       ├── fisico.class.js  ──require──► produto.class.js
+       ├── estoque.class.js   (não importa Produto diretamente)
+       └── item-estoque.class.js
+
+| Arquivo               | Exporta                      | Importa de                        |
+|-----------------------|------------------------------|-----------------------------------|
+| produto.class.js      | Produto                      | —                                 |
+| digital.class.js      | Digital                      | Produto                           |
+| fisico.class.js       | Fisico                       | Produto                           |
+| estoque.class.js      | Estoque                      | —                                 |
+| item-estoque.class.js | ItemEstoque                  | —                                 |
+| index.js              | —                            | Digital, Fisico, Estoque, ItemEstoque |
+
+----------------------------------------------------
+
+4) QUADRO RESUMO — CONCEITOS DE POO NO PROJETO
+--------------------------------------------------------------------------------
+
+  Conceito          | Onde aparece              | O que significa aqui
+  ------------------|---------------------------|----------------------------------
+  Classe            | Produto, Digital, etc.    | Molde (receita)
+  Objeto/Instância  | zelda, xbox               | Produto criado com new
+  Encapsulamento    | this.nome, métodos        | Dados + ações juntos na classe
+  Herança           | Digital extends Produto   | Filha reusa e especializa o pai
+  Polimorfismo      | item.get() no Estoque     | Mesma chamada, resultado diferente
+  Composição        | Estoque, ItemEstoque      | Classe guarda outros objetos dentro
+  Export/Import     | module.exports / require  | Um arquivo usa classe de outro
+
+
+Quadro POO — conceito × onde aparece
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Conceito POO        | Onde no projeto                      | Exemplo no código                             |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Classe              | Todos os .class.js                   | class Produto { }                             |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Objeto              | index.js                             | const zelda = new Digital(...)                |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Herança             | Digital, Fisico                      | class Digital extends Produto                 |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Polimorfismo        | Estoque + get() / valorPromocional() | Mesmo item.get(), retornos diferentes         |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Composição          | Estoque, ItemEstoque                 | new Estoque([zelda, xbox])                    |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Encapsulamento      | Produto                              | this.nome, métodos que usam this              |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| Export/Import       | module.exports / require              | Um arquivo usa classe de outro                |
+|---------------------|--------------------------------------|-----------------------------------------------|
+
+
+
+
+
+5) POLIMORFISMO — EXEMPLO CONCRETO: Mesma chamada, comportamento diferente:
+--------------------------------------------------------------------------------
+
+  estoque.getValorTotal() faz em loop:
+
+    zelda.get()  →  { nome, preco, link, promocional }     (versão Digital)
+    xbox.get()   →  { nome, preco, endereco, total,promocional}  (versão Fisico)
+
+  Mesmo método (.get), comportamentos diferentes.
+
+  xbox.valorPromocional()  → usa cálculo de Fisico (com frete)
+  zelda.valorPromocional() → usa cálculo de Produto (só preço * 0.8)
+
+Estoque não sabe se o item é Digital ou Fisico — só chama .get(). 
+Cada objeto responde do seu jeito. O mesmo vale para valorPromocional():
+* zelda → preco * 0.8 (regra de Produto)
+* xbox → (preco * 1.1) * 0.8 (regra de Fisico, com frete)
+
+
+6) ORDEM DE ESTUDO (arquivos)
+--------------------------------------------------------------------------------
+
+  1. produto.class.js -> base
+  2. digital.class.js ->herança 
+  3. fisico.class.js -> heranca + polimorfismo
+  4. estoque.class.js -> composição
+  5. item-estoque.class.js -> composição
+  6. index.js -> junta tudo
+
+================================================================================
+
+7. Analogia rápida
++--------------+-------------------------------------------------------------+
+| Peça         | Pense como                                                  |
++--------------+-------------------------------------------------------------+
+| Produto      | Categoria “veículo”                                         |
++--------------+-------------------------------------------------------------+
+|Digital/Fisico | “carro” e “moto” — são veículos, com detalhes próprios    |
++--------------+-------------------------------------------------------------+
+| Fiesta/Honda | Seu carro e sua moto de verdade (objetos)                   |
++--------------+-------------------------------------------------------------+
+| Estoque      | Garagem que guarda vários veículos                          |
++--------------+-------------------------------------------------------------+
+| ItemEstoque  | “3 unidades daquele produto X”                              |
++--------------+-------------------------------------------------------------+
+| index.js     | Dono da loja que usa tudo isso                              |
++--------------+-------------------------------------------------------------+

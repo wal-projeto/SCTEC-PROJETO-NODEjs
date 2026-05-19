@@ -1,0 +1,11 @@
+{
+  "name": "tutor-poo",
+  "version": "1.0.0",
+  "description": "Tutor interativo de POO baseado no ebook SCTEC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "aula": "node index.js"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,26 @@
+================================================================================
+  POO-TESTE — APRENDA NA ORDEM (igual montar um quebra-cabeça)
+================================================================================
+
+PARTE A — Arquivos do projeto (leia e depois rode o passo correspondente)
+--------------------------------------------------------------------------------
+  1) src/module/produto/produto.class.js     → PASSO 1 (classe + export)
+  2) src/module/digital/digital.class.js     → PASSO 2 (import + herança)
+  3) src/module/fisico/fisico.class.js       → PASSO 3 (herança + polimorfismo)
+  4) src/module/estoque/estoque.class.js     → PASSO 4 (composição)
+  5) src/module/estoque/item-estoque.class.js → PASSO 5 (composição)
+  6) index.js                                → PASSO 6 (junta tudo + Express)
+
+PARTE B — Rode no terminal (pasta POO-TESTE), um comando por vez
+--------------------------------------------------------------------------------
+  npm install
+  node passos/passo-01-produto.js
+  node passos/passo-02-digital.js
+  node passos/passo-03-fisico.js
+  node passos/passo-04-estoque.js
+  node passos/passo-05-item-estoque.js
+  node index.js
+
+Dica: abra cada arquivo .js e leia os comentários ANTES de rodar o passo.
+
+================================================================================

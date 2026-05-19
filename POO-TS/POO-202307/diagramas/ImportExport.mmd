@@ -1,0 +1,14 @@
+flowchart TB
+    index["index.js"]
+    digital["digital.class.js"]
+    fisico["fisico.class.js"]
+    produto["produto.class.js"]
+    estoque["estoque.class.js"]
+    item["item-estoque.class.js"]
+
+    index -->|"require"| digital
+    index -->|"require"| fisico
+    index -->|"require"| estoque
+    index -->|"require"| item
+    digital -->|"require"| produto
+    fisico -->|"require"| produto

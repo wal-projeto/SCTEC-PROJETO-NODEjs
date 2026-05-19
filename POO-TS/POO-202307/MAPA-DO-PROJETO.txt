@@ -1,0 +1,129 @@
+================================================================================
+  MAPA LÓGICO — POO-202307 (quem chama quem + conceitos de POO)
+================================================================================
+
+  Diagramas visuais (igual às fotos do POO-TESTE):
+    → Abra no navegador:  diagramas/visualizar-diagramas.html
+    → Ou veja os arquivos: diagramas/ProjetoExecucao.mmd
+                            diagramas/ImportExport.mmd
+                            diagramas/Polimorfismo.mmd
+
+================================================================================
+
+1) HIERARQUIA DE HERANÇA (quem herda de quem)
+--------------------------------------------------------------------------------
+
+                                     ┌─────────────────────────────┐
+                                     │         PRODUTO             │
+                                     ├─────────────────────────────┤
+                                     │ + nome, preco               │ ← CLASSE PAI
+                                     │ + verificarProduto()        │
+                                     │ + ligar()                   │
+                                     │ + valorPromocional()        │
+                                     │ + get()                     │
+                                     └────────────┬────────────────┘
+                                                  │ extends ("É UM")
+                        ┌─────────────────────────┴─────────────────────────┐
+                ┌───────▼───────┐                                   ┌───────▼───────┐
+                │    DIGITAL    │                                   │    FISICO     │
+                ├───────────────┤                                   ├───────────────┤
+                │ + get()       │                                   │ + calcularFrete()
+                │   + link      │                                   │ + valorPromocional()
+                └───────────────┘                                   │ + get() + endereco
+                                                                    └───────────────┘
+
+  Digital É UM Produto  |  Fisico É UM Produto
+  Estoque e ItemEstoque NÃO herdam de Produto (só usam objetos dentro)
+
+
+2) COMPOSIÇÃO (quem "tem" quem)
+--------------------------------------------------------------------------------
+
+    Estoque ──────► [ samsung (Digital), notebook (Fisico) ]
+    ItemEstoque ──► notebook + quantidade 6
+
+  DigitalComposition (no index.js) = exemplo extra, NÃO roda no programa.
+
+
+3) QUEM CHAMA QUEM — fluxo: node index.js  (ver ProjetoExecucao)
+--------------------------------------------------------------------------------
+
+  index.js
+     │
+     ├─ require() → carrega Digital, Fisico, Estoque, ItemEstoque
+     │
+     └─ app.listen(3001) → quando servidor sobe:
+            │
+            ├─ new Digital('TV samsung', 4000)  →  samsung
+            │      └─ samsung.get()
+            │
+            ├─ new Fisico('notebook dell', 1000)  →  notebook
+            │      └─ notebook.get()
+            │
+            ├─ new Estoque([samsung, notebook])
+            │      └─ getValorTotal()
+            │            ├─ samsung.get().preco
+            │            └─ notebook.get().preco   ← POLIMORFISMO
+            │
+            └─ new ItemEstoque(notebook, 6)
+                   └─ notebookEstoque.get()
+
+  Objetos do SEU código atual:
+    samsung  = produto digital
+    notebook = produto físico
+
+
+4) IMPORT / EXPORT (ver ImportExport)
+--------------------------------------------------------------------------------
+
+    index.js
+       ├── digital.class.js ──require──► produto.class.js
+       ├── fisico.class.js  ──require──► produto.class.js
+       ├── estoque.class.js
+       └── item-estoque.class.js
+
+| Arquivo               | Exporta     | Importa de   |
+|-----------------------|-------------|--------------|
+| produto.class.js      | Produto     | —            |
+| digital.class.js      | Digital     | Produto      |
+| fisico.class.js       | Fisico      | Produto      |
+| estoque.class.js      | Estoque     | —            |
+| item-estoque.class.js | ItemEstoque | —            |
+| index.js              | —           | as 4 classes |
+
+
+5) POLIMORFISMO (ver Polimorfismo)
+--------------------------------------------------------------------------------
+
+  estoque.getValorTotal():
+
+    samsung.get()  →  { nome, preco, link, promocional }
+    notebook.get() →  { nome, preco, endereco, total, promocional }
+
+  Mesma chamada .get(), respostas diferentes.
+
+  samsung.valorPromocional()  → preco * 0.8           (regra Produto)
+  notebook.valorPromocional() → (preco * 1.1) * 0.8   (regra Fisico + frete)
+
+
+6) DigitalComposition — NÃO faz parte da execução
+--------------------------------------------------------------------------------
+
+  Está no index.js só para comparar:
+    Herança:     Digital extends Produto
+    Composição:  DigitalComposition TEM um produto
+
+  Ninguém chama: new DigitalComposition(...)
+
+
+7) ORDEM DE ESTUDO
+--------------------------------------------------------------------------------
+
+  1. produto.class.js
+  2. digital.class.js
+  3. fisico.class.js
+  4. estoque.class.js
+  5. item-estoque.class.js
+  6. index.js
+
+================================================================================

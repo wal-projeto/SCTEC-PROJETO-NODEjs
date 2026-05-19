@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant I as index.js
+    participant D as Digital
+    participant P as Produto
+    participant F as Fisico
+    participant E as Estoque
+    participant IE as ItemEstoque
+
+    Note over I: require() carrega classes
+    Note over I: app.listen(3001) sobe servidor
+
+    I->>D: new Digital('TV samsung', 4000)
+    D->>P: constructor de Produto roda
+    I->>D: samsung.get()
+
+    I->>F: new Fisico('notebook dell', 1000)
+    F->>P: constructor de Produto roda
+    I->>F: notebook.get()
+
+    I->>E: new Estoque([samsung, notebook])
+    E->>D: samsung.get() para pegar preco
+    E->>F: notebook.get() para pegar preco
+    I->>E: getValorTotal()
+
+    I->>IE: new ItemEstoque(notebook, 6)
+    I->>IE: notebookEstoque.get()

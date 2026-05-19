@@ -1,0 +1,15 @@
+flowchart TB
+    subgraph chamada ["Mesma chamada, comportamento diferente"]
+        E["estoque.getValorTotal()"]
+    end
+
+    E --> S["samsung.get()"]
+    E --> N["notebook.get()"]
+
+    S --> SR["{ nome, preco, link, promocional }"]
+    N --> NR["{ nome, preco, endereco, total, promocional }"]
+
+    subgraph promo ["valorPromocional()"]
+        SP["samsung: preco * 0.8"]
+        NP["notebook: (preco * 1.1) * 0.8"]
+    end
