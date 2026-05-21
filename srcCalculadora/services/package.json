@@ -1,0 +1,18 @@
+{
+  "name": "minha-api-sctec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node --dns-result-order=ipv4first ./src/api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wal-projeto/SCTEC-PROJETO-NODEjs.git"
+  },
+  "keywords": [],
+  "author": "Walquiria de Oliveira",
+  "license": "ISC",
+  "type": "module"
+}

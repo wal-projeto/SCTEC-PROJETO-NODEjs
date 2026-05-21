@@ -33,17 +33,14 @@ sudo resolvectl flush-caches
 # 2. Desliga o cache de requisições temporárias do Node
 export NODE_OPTIONS=""
 
-📂 SCTEC-PROJETO-NODEjs/
-├── 📂 src/
-│   ├── 📂 repositories/
-│   │   ├── githubRepository.js
-│   │   └── fileRepository.js
-│   ├── 📂 services/
-│   │   └── userService.js
-│   └── 📂 controllers/
-│       └── cliController.js
-├── api.js (Este será meu arquivo principal/main)
-└── database.json
+textSCTEC-PROJETO-NODEjs/    <-- Raiz do seu projeto
+├── node_modules/   <-- Pasta de dependências (gerada automaticamente)
+├── src/      <-- APENAS seus arquivos de código original
+│   ├── api.ts
+│   └── (outros arquivos .ts)
+├── package.json     <-- Na raiz do projeto
+├── package-lock.json <-- Na raiz do projeto
+└── tsconfig.json    <-- Na raiz do projeto
 
 MINHA TERCEIRA BRANCH COM MATERIAIS DE ESTUDO: 
 git push -u origin EstudoJavaScript
@@ -54,6 +51,9 @@ git push -u origin EstudoJavaScript
 
 arquivo raiz original agora só serve para iniciar o terminal e direcionar para as funções corretas conforme a escolha do menu
 Ficou no arquivo principal apenas para ligar o terminal e chamar o Controller de acordo com a opção (1, 2 ou 3). 
+
+COM TYPESCRIPT : npm run dev
+
 */
 
 // api.js RODAR COM: npm start 

@@ -1,18 +1,21 @@
 {
-  "name": "minha-api-sctec",
+  "name": "sctec-projeto-nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "dist/api.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node --dns-result-order=ipv4first ./src/api.js",
+    "build": "tsc",
+    "start": "tsc && node dist/api.js",
+    "dev": "tsx watch src/api.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:wal-projeto/SCTEC-PROJETO-NODEjs.git"
-  },
   "keywords": [],
-  "author": "Walquiria de Oliveira",
+  "author": "",
   "license": "ISC",
-  "type": "module"
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0"
+  }
 }
