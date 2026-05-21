@@ -16,7 +16,9 @@
 git fetch upstream
 
 2. Vá para a sua branch onde quer colocar os arquivos
+git checkout main
 git checkout featureSCTEC
+git checkout EstudoJavaScript
 
 RODAR COM: npm start 
 OU 
@@ -31,34 +33,49 @@ sudo resolvectl flush-caches
 # 2. Desliga o cache de requisições temporárias do Node
 export NODE_OPTIONS=""
 
-📂 SCTEC-PROJETO-NODEjs/
-├── 📂 src/
-│   ├── 📂 repositories/
-│   │   ├── githubRepository.js
-│   │   └── fileRepository.js
-│   ├── 📂 services/
-│   │   └── userService.js
-│   └── 📂 controllers/
-│       └── cliController.js
-├── api.js (Este será meu arquivo principal/main)
-└── database.json
+textSCTEC-PROJETO-NODEjs/    <-- Raiz do seu projeto
+├── node_modules/   <-- Pasta de dependências (gerada automaticamente)
+├── src/      <-- APENAS seus arquivos de código original
+│   ├── api.ts
+│   └── (outros arquivos .ts)
+├── package.json     <-- Na raiz do projeto
+├── package-lock.json <-- Na raiz do projeto
+└── tsconfig.json    <-- Na raiz do projeto
 
+MINHA TERCEIRA BRANCH COM MATERIAIS DE ESTUDO: 
+git push -u origin EstudoJavaScript
+ * O termo -u origin serve para conectar a sua branch local diretamente com o GitHub. 
+ * Nas próximas vezes que quiser enviar alterações dessa branch, bastará digitar apenas:
+ * > git push.
+ * git checkout EstudoJavaScript <-COMANDO PARA IR A ELA
 
 arquivo raiz original agora só serve para iniciar o terminal e direcionar para as funções corretas conforme a escolha do menu
 Ficou no arquivo principal apenas para ligar o terminal e chamar o Controller de acordo com a opção (1, 2 ou 3). 
+
+COM TYPESCRIPT : npm run dev
+
 */
 
-// api.js
+// api.js RODAR COM: npm start 
+// Buscar texto no código: Ctrol + F
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
 import { createInterface } from "node:readline/promises";
-import { clienteController } from "./src/controllers";
+
+
+
 
 // Importações dos pedaços de código de outras pastas
 import { buscarUsuario} from "./repositories/githubRepository.js"
 import { salvarArquivo } from "./services/userServices.js";
-import { usuraioEspecifico } from "./controllers/clienteController.js";
+import { usuarioEspecifico } from "./controllers/clienteController.js";
+import { lerArquivo } from "./repositories/fileRepository.js";
 
-async function main() { const interfaceConsole = createInterface(stdin, stdout);
+
+
+async function main() { const interfaceConsole = createInterface({
+   input: stdin,  
+  output: stdout,  
+});
 
   try {
     // INTERFACE DE USUÁRIO (CLI)
@@ -71,7 +88,7 @@ async function main() { const interfaceConsole = createInterface(stdin, stdout);
     console.log("  [ 3 ] Buscar um usuário especifico no Banco      ");
     console.log("=================================================\n");
 
-    const opcao = await interfaceConsole.question("Escola uma opção ( 1 , 2 , 3):\n ");
+    const opcao = await interfaceConsole.question("Escolha uma opção ( 1 , 2 , 3):\n ");
 
 
     // Busca usuário no GitHub e Salva no arquivo database.json
@@ -81,7 +98,7 @@ async function main() { const interfaceConsole = createInterface(stdin, stdout);
     // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
     const usuario = await buscarUsuario(respostaOperação);
 
-     //Se usuario recebeu resposta da Função buscrUsuario, Mostrará na tela o Nome e o Username dele
+     //Se usuario recebeu resposta da Função buscarUsuario, Mostrará na tela o Nome e o Username dele
     console.log(`\nUsuário encontrado`);
     console.log(`Nome: ${usuario.name  || "Não informado!"}`);
     console.log(`Username: ${usuario.login}`);
