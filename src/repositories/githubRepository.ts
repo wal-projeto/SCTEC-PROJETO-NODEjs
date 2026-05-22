@@ -13,7 +13,7 @@ import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
 setDefaultAutoSelectFamilyAttemptTimeout(500); // Força o fetch a pular o IPv6 travado do WSL em 500ms
 
 
-export async function buscarUsuario(username) { 
+export async function buscarUsuario(username: string) { 
   const urlBase = "https://api.github.com/users/";
 
   //  ADICIONE ESTA LINHA ABAIXO:
@@ -54,7 +54,7 @@ export async function buscarUsuario(username) {
 
     return body;
  
-} catch (erro) {
+} catch (erro:any) {
     clearTimeout(timerTimeout);
     
     // 5. Captura especificamente se o erro aconteceu porque nós cancelamos por demora

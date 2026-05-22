@@ -7,7 +7,7 @@
 import { writeFile } from "node:fs/promises";
 import { lerArquivo } from "../repositories/fileRepository.js";
 
-export async function salvarArquivo(novoUsuario) { 
+export async function salvarArquivo(novoUsuario:any) { 
     const usuariosExistentes = await lerArquivo(); 
   // chamando larArquivo (Encapsulamento) para carregar a Lista atual do aquivo
 

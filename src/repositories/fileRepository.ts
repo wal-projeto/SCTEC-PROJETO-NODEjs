@@ -31,7 +31,7 @@ export async function lerArquivo() {
     return [];
 
 
-  } catch (error) {
+  } catch (error:any) {
     //  Se o arquivo não existir (ENOENT), retorna um array vazio de forma segura
     if (error.code === 'ENOENT') {
       return [];

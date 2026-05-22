@@ -6,11 +6,12 @@ Interação com o usuário é Controller.
 */
 
 //import { userService } from "../services/userService.js";
+import type { Interface } from "readline/promises";
 import { lerArquivo } from "../repositories/fileRepository.js";
 
  
 
-export async function usuarioEspecifico(interfaceConsole) {
+export async function usuarioEspecifico(interfaceConsole: Interface) {
       const lerAquivo = await lerArquivo();
 
       if (lerAquivo.length === 0) {
