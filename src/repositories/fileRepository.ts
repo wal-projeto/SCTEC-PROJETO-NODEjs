@@ -7,7 +7,7 @@
  * Ela acessa diretamente o arquivo local database.json. 
  * Tudo que acessa dados locais é Repository.
  */
-import { writeFile, readFile } from "node:fs/promises"; // file-system
+import { readFile } from "node:fs/promises"; // file-system
 
 
 export async function lerArquivo() {

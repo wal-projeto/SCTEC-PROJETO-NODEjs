@@ -11,11 +11,11 @@
 export interface Usuario {
   id: number;
   login: string;
-  name: string;
-  url: string;
-  bio: string;
-  email: string;
-  public_repos?: number;
+  name?: string;
+  //url: string;
+  //bio: string;
+  //email: string;
+  //public_repos?: number;
 }
 
 export interface ErroConexao {

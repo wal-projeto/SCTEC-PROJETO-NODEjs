@@ -10,6 +10,7 @@
 
 // É uma configuração de rede que afeta diretamente o fetch (chamada externa).
 import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
+
 setDefaultAutoSelectFamilyAttemptTimeout(500); // Força o fetch a pular o IPv6 travado do WSL em 500ms
 
 

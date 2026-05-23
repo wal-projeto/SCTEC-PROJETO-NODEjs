@@ -62,62 +62,67 @@ COM TYPESCRIPT : npm run dev
 */
 
 import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
-import { createInterface } from "node:readline/promises";
+
+//import { createInterface } from "readline/promises";
+import readline from "readline/promises";
+//import type { Interface } from "readline/promises";
 import { buscarUsuario } from "./repositories/githubRepository.js";
 import { salvarArquivo } from "./services/userServices.js";
 import { usuarioEspecifico } from "./controllers/clienteController.js";
 import { lerArquivo } from "./repositories/fileRepository.js";
 
-
-async function main() { const terminal = createInterface({
-   input: stdin,  
-  output: stdout,  
+const terminal = readline.createInterface({
+  input: stdin,
+  output: stdout,
 });
 
-let escolha = true;
-while(escolha){
+async function main() {
+  // INTERFACE DE USUÁRIO (CLI)
+  console.log("===================================================");
+  console.log("                  MENU                             ");
+  console.log("===================================================");
+  console.log("            INSTRUÇÕES DE USO:                     ");
+  console.log("  [ 1 ] Buscar Usuário no GitHub e Salvar no Banco ");
+  console.log("  [ 2 ] Listar Usuários Salvos no Banco            ");
+  console.log("  [ 3 ] Buscar um usuário especifico no Banco      ");
+  console.log("  [ 4 ] Sair                                       ");
+  console.log("=================================================\n");
+
+  const opcaoUser = await terminal.question(
+    "Escolha uma opção ( 1 , 2 , 3, 4):", answer => {console.log(' Resposta', answer);
+  terminal.close()});
 
   try {
-    // INTERFACE DE USUÁRIO (CLI)
-    console.log("===================================================");
-    console.log("                  MENU                             ");
-    console.log("===================================================");
-    console.log("            INSTRUÇÕES DE USO:                     ");
-    console.log("  [ 1 ] Buscar Usuário no GitHub e Salvar no Banco ");
-    console.log("  [ 2 ] Listar Usuários Salvos no Banco            ");
-    console.log("  [ 3 ] Buscar um usuário especifico no Banco      ");
-    console.log("=================================================\n");
-
-    const opcao = await terminal.question("Escolha uma opção ( 1 , 2 , 3): ");
-
-
+    let opcao = Number(opcaoUser);
 
     // Busca usuário no GitHub e Salva no arquivo database.json
-    if(opcao === "1") {
-      const respostaOperação = await terminal.question("Digite o usuário:\n");
+    if (opcao === 1) {
+      const respostaOperação =  terminal.question("Digite o usuário:\n");
 
-    // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
-    const usuario = await buscarUsuario(respostaOperação);
+      // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
+      const usuario = buscarUsuario(respostaOperação);
 
-     //Se usuario recebeu resposta da Função buscarUsuario, Mostrará na tela o Nome e o Username dele
-    console.log(`\nUsuário encontrado`);
-    console.log(`Nome: ${usuario.name  || "Não informado!"}`);
-    console.log(`Username: ${usuario.login}`);
+      //Se usuario recebeu resposta da Função buscarUsuario, Mostrará na tela o Nome e o Username dele
+      console.log(`\nUsuário encontrado`);
+      console.log(`Nome: ${usuario.name || "Não informado!"}`);
+      console.log(`Username: ${usuario.login}`);
 
-    // Pergunta se deseja salvar
-    const desejaSalvar = await terminal.question("Deseja salvar o usuário? (s / n):\n");
-    if(desejaSalvar.toLocaleLowerCase() ==='s') {
-      await salvarArquivo(usuario); 
-      // callstack -> stacktrace
-    } else{
-      console.log("BUGG");
+      // Pergunta se deseja salvar
+      const desejaSalvar = terminal.question(
+        "Deseja salvar o usuário? (s / n):\n",
+      );
+      if (desejaSalvar.toLocaleLowerCase() === "s") {
+        await salvarArquivo(usuario);
+        // callstack -> stacktrace
+      } else {
+        console.log("BUGG");
+        return;
+      }
     }
-    }
 
-
-    if (opcao === "2"){
+    if (opcao === 2) {
       const lerAquivoTerminal = await lerArquivo();
-      
+
       if (lerAquivoTerminal.length === 0) {
         console.log("\n📭 O arquivo database.json está vazio.");
       } else {
@@ -127,32 +132,32 @@ while(escolha){
       }
     }
 
-
-   
-    if (opcao === "3") {
+    if (opcao === 3) {
       // O 'await' impede o 'pending' e passamos a interfaceConsole para dentro da função
-      await usuarioEspecifico(terminal); 
+      await usuarioEspecifico(terminal);
     }
 
-    if (opcao === "4") {
-      escolha = false;
+    if (opcao === 4) {
+      console.log("\n Encerrando  o programa...");
+      return;
     }
 
-
-
-
-  // Central de tratamento de erros reais da função main()
-  } catch (erro:any) {
+    // Central de tratamento de erros reais da função main()
+  } catch (erro: any) {
     // Se for o erro de timeout padrão do Node ou o nosso personalizado
-    if (erro.message.includes("demorou demais") || (erro.cause && erro.cause.code === 'UND_ERR_CONNECT_TIMEOUT')) {
-      console.error("❌ Erro de Rede: Tempo limite esgotado. Verifique sua conexão ou tente novamente.");
+    if (
+      erro.message.includes("demorou demais") ||
+      (erro.cause && erro.cause.code === "UND_ERR_CONNECT_TIMEOUT")
+    ) {
+      console.error(
+        "❌ Erro de Rede: Tempo limite esgotado. Verifique sua conexão ou tente novamente.",
+      );
     } else {
       // Este usuário não existe no GitHub  ou outras falhas
-      console.error("❌ Falha no Sistema :  "  + erro.message);
+      console.error("❌ Falha no Sistema :  " + erro.message);
     }
-   // interfaceConsole.close();
-    console.log("\n Sessão encerrada.");
   }
-}
+  terminal.close();
+  process.exit(0);
 }
 main();
