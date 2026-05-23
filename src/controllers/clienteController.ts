@@ -54,7 +54,7 @@ export async function usuarioEspecifico(interfaceConsole: Interface) {
           };
 
           console.log(JSON.stringify(dadosExibicao, null, 2));
-          console.log("=================================");
+        
         }
       }
     }

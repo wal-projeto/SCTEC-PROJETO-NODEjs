@@ -1,3 +1,7 @@
+// Instale o ts-node globalmente: npm install -g ts-node
+// Execute o arquivo .ts diretamente: ts-node seu_arquivo.ts
+
+
 import { stdin , stdout } from "process";
 import { createInterface } from "node:readline/promises";
 import { readFile, writeFile } from "node:fs/promises";
@@ -84,6 +88,9 @@ async function salvarArquivo(usuario: Usuario): Promise<void> {
     
     console.log(`Usuário "${usuario.login}" de "${usuario.name ? usuario.name : "-Nome não informado-"}" incluído no arquivo com sucesso!`);
 }
+
+
+
 
 async function main(): Promise<void>{
     const interfaceConsole = createInterface({input: stdin, output: stdout});

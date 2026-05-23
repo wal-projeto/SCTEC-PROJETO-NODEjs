@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/api.js",
-    "dev": "tsx watch src/api.ts",
+    "dev": "tsx --watch src/api.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,7 +15,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.0.0",
-    "tsx": "^4.0.0"
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
   }
 }

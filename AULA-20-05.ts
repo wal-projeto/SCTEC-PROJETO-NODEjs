@@ -1,4 +1,7 @@
 // dados de um servidor, eles chegam como texto (String).
+
+import { error } from "console";
+
 //  crases (`) para envolver o texto.
 const usuarioJsonTexto = `{
   "nome": "João Silva",
@@ -145,9 +148,62 @@ flagCriada: Define um tipo de objeto com chaves específicas e valores de string
 OptionsFlags<Type>: Um tipo genérico que converte cada chave de um tipo dado em uma chave com o tipo boolean.
 Flagsboleana: Aplica OptionsFlags ao tipo flagCriada, resultando em um tipo onde cada chave de flagCriada é convertida em uma chave com o tipo boolean.
 flags: é do tipo Flagsboleana e recebe os valores de suas chaves como boleanos
-
-
-
-
  */
 
+
+// MARROW TYPE : DESANBIGUAR(RETIRAR AS VARIÁVEIS DO "OU" DO PARÂMETRO) PARA PODER RETORNAR UM VALOR ESPECIFICO PARA CADA UMA DELAS:
+
+function desambiguar(a: String | number | boolean ) {
+    if ( a === 'string'){
+        return a.toLocaleUpperCase
+    }
+    if( a === 'boolean'){
+        return a
+    }
+    return a;
+}
+console.log(desambiguar("Maranhão"));
+console.log(desambiguar(true));
+console.log(desambiguar(110));
+
+const b: number | string = 500;  // uma variável tambem pode receber mais tipos
+console.log(desambiguar(b));
+
+// OBS: O ERRO É UMA CLASSE/INTERFACE:
+// clss Error{
+//     message
+// }
+
+// Uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any deve retornar um valor:
+// UMA FUNÇÃO PODE RETORNAR TAMBEM MAIS TIPOS , MAS NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR UM DOS VALORES:
+async function http(url: string): Promise <string | Error> {
+
+  const req = { status: 500 };
+  
+  // TRANTANDO status para poder retornar ERRO ou SUCESSO
+  if (req.status) {
+    // Retorna um erro 500
+    return new Error(`retorno ${req.status}`);
+  }
+  if (req.status > 100 && req.status < 399) {
+    // retorna uma String
+    return `returno Sucesso! ${req.status}`;
+  }
+  return new Error("Erro Bizarro"); // retorna um Erro
+}
+
+// FUNÇÃO MAIN()
+function main(){
+const resultado =   http('google.com.br'); //  retorno pode ser uma String ou um Erro
+
+console.log(resultado.toString); // unicas propriedades aceitas para os dois casos de retorno: toString e valueOf
+console.log(resultado.valueOf);
+
+// AGORA SOU OBRIGADO A TRATAR O ERRO, POIS SENÃO NÃO CONSIGO UTILIZAR A STRING:
+if ( typeof resultado !== 'string'){
+    resultado 
+} else{
+    resultado
+}
+}
+main();

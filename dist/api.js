@@ -54,88 +54,79 @@ git stash <- Guarde suas alterações atuais
 git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
-api.js RODAR COM: npm start
+api.js RODAR COM: npm start  -> funciona porque no package.json script : {'start: node dist/api.js}
 
 Buscar texto no código: Ctrol + F
 
-COM TYPESCRIPT : npm run dev
+COM TYPESCRIPT : npm run dev -> so funciona se o script dev existir
 */
-import { stdin, stdout } from "process"; //standardIn E standardOut -> entrada padrão e saída padrão
-import { createInterface } from "readline/promises";
+import { stdin, stdout } from 'process';
+import { createInterface } from 'node:readline/promises';
 import { buscarUsuario } from "./repositories/githubRepository.js";
 import { salvarArquivo } from "./services/userServices.js";
 import { usuarioEspecifico } from "./controllers/clienteController.js";
 import { lerArquivo } from "./repositories/fileRepository.js";
-const terminal = createInterface({
-    input: stdin,
-    output: stdout,
-});
+//const URL_DATABASE = `../database.json`;
 async function main() {
-    // INTERFACE DE USUÁRIO (CLI)
-    console.log("===================================================");
-    console.log("                  MENU                             ");
-    console.log("===================================================");
-    console.log("            INSTRUÇÕES DE USO:                     ");
-    console.log("  [ 1 ] Buscar Usuário no GitHub e Salvar no Banco ");
-    console.log("  [ 2 ] Listar Usuários Salvos no Banco            ");
-    console.log("  [ 3 ] Buscar um usuário especifico no Banco      ");
-    console.log("  [ 4 ] Sair                                       ");
-    console.log("=================================================\n");
-    const opcaoUser = await terminal.question("Escolha uma opção ( 1 , 2 , 3, 4):");
-    try {
-        let opcao = Number(opcaoUser);
-        // Busca usuário no GitHub e Salva no arquivo database.json
-        if (opcao === 1) {
-            const respostaOperação = await terminal.question("Digite o usuário:\n");
-            // Chama a função buscarUsuario: O fetch Faz a busca (se não tiver internet, o código pula DIRETO para o CATCH)
-            const usuario = await buscarUsuario(respostaOperação);
-            //Se usuario recebeu resposta da Função buscarUsuario, Mostrará na tela o Nome e o Username dele
-            console.log(`\nUsuário encontrado`);
-            console.log(`Nome: ${usuario.name || "Não informado!"}`);
-            console.log(`Username: ${usuario.login}`);
-            // Pergunta se deseja salvar
-            const desejaSalvar = await terminal.question("Deseja salvar o usuário? (s / n):\n");
-            if (desejaSalvar.toLocaleLowerCase() === "s") {
-                await salvarArquivo(usuario);
-                // callstack -> stacktrace
+    const interfaceConsole = createInterface({ input: stdin, output: stdout });
+    let escolha = true;
+    while (escolha) {
+        // INTERFACE DE USUÁRIO (CLI)
+        console.log('===================================================');
+        console.log('                  MENU                             ');
+        console.log('===================================================');
+        console.log('            INSTRUÇÕES DE USO:                     ');
+        console.log('  [ 1 ] Buscar Usuário no GitHub e Salvar no Banco ');
+        console.log('  [ 2 ] Listar Usuários Salvos no Banco            ');
+        console.log('  [ 3 ] Buscar um usuário especifico no Banco      ');
+        console.log('  [ 4 ] Sair                                        ');
+        console.log('=================================================\n');
+        const opcao = await interfaceConsole.question('Escolha uma opção ( 1 , 2 , 3, 4):\n');
+        try {
+            // Busca usuário no GitHub e Salva no arquivo database.json
+            if (opcao === '1') {
+                const respostaOperação = await interfaceConsole.question('Digite o usuário:\n');
+                const usuario = await buscarUsuario(respostaOperação);
+                console.log(`\nUsuário encontrado`);
+                console.log(`Nome: ${usuario.name || 'Não informado!'}`);
+                console.log(`Username: ${usuario.login}`);
+                const desejaSalvar = await interfaceConsole.question('Deseja salvar o usuário? (s / n):\n');
+                if (desejaSalvar.toLowerCase() === 's') {
+                    await salvarArquivo(usuario);
+                }
+            }
+            else if (opcao === '2') {
+                const lerAquivoTerminal = await lerArquivo();
+                if (lerAquivoTerminal.length === 0) {
+                    console.log('\n📭 O arquivo database.json está vazio.');
+                }
+                else {
+                    console.log('\nLista de Usuários no Arquivo database.json:');
+                    console.log(JSON.stringify(lerAquivoTerminal, null, 2));
+                }
+            }
+            else if (opcao === '3') {
+                await usuarioEspecifico(interfaceConsole);
+            }
+            else if (opcao === '4') {
+                console.log('\n Encerrando o programa...');
+                escolha = false;
             }
             else {
-                console.log("BUGG");
-                return;
+                console.log('Opção inválida. Por favor, escolha uma opção válida.');
             }
         }
-        if (opcao === 2) {
-            const lerAquivoTerminal = await lerArquivo();
-            if (lerAquivoTerminal.length === 0) {
-                console.log("\n📭 O arquivo database.json está vazio.");
+        catch (erro) {
+            if (erro.message.includes('demorou demais') ||
+                (erro.cause && erro.cause.code === 'UND_ERR_CONNECT_TIMEOUT')) {
+                console.error('❌ Erro de Rede: Tempo limite esgotado. Verifique sua conexão ou tente novamente.');
             }
             else {
-                console.log("\nLista de Usuários no Arquivo database.json:");
-                // JSON.stringify(dados, substituto, espaços) transforma o array em texto formatado
-                console.log(JSON.stringify(lerAquivoTerminal, null, 2));
+                console.error('❌ Falha no Sistema : ' + erro.message);
             }
         }
-        if (opcao === 3) {
-            // O 'await' impede o 'pending' e passamos a interfaceConsole para dentro da função
-            await usuarioEspecifico(terminal);
-        }
-        if (opcao === 4) {
-            console.log("\n Encerrando  o programa...");
-            return;
-        }
-        // Central de tratamento de erros reais da função main()
     }
-    catch (erro) {
-        // Se for o erro de timeout padrão do Node ou o nosso personalizado
-        if (erro.message.includes("demorou demais") || (erro.cause && erro.cause.code === 'UND_ERR_CONNECT_TIMEOUT')) {
-            console.error("❌ Erro de Rede: Tempo limite esgotado. Verifique sua conexão ou tente novamente.");
-        }
-        else {
-            // Este usuário não existe no GitHub  ou outras falhas
-            console.error("❌ Falha no Sistema :  " + erro.message);
-        }
-    }
-    terminal.close();
+    interfaceConsole.close();
     process.exit(0);
 }
 main();

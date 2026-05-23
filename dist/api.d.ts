@@ -54,11 +54,11 @@ git stash <- Guarde suas alterações atuais
 git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
-api.js RODAR COM: npm start
+api.js RODAR COM: npm start  -> funciona porque no package.json script : {'start: node dist/api.js}
 
 Buscar texto no código: Ctrol + F
 
-COM TYPESCRIPT : npm run dev
+COM TYPESCRIPT : npm run dev -> so funciona se o script dev existir
 */
 export {};
 //# sourceMappingURL=api.d.ts.map
