@@ -1,3 +1,7 @@
 node-modules/
 .env*
 .vscode
+eslintrc.json
+.prettierignore
+.prettierrc
+dist
