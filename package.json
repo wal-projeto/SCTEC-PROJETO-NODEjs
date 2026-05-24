@@ -2,7 +2,7 @@
   "name": "sctec-projeto-nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/api.js",
+  "main": "api.js",
   "type": "module",
   "scripts": {
     "build": "tsc",

@@ -13,10 +13,19 @@
 // COMO representar a informação
 
 // let carro = {
-//
 //     cor: "vermelho",
 //     tipo: "sedan"
 // }
+
+
+// PARA EXECUTAR O ARQUIVO:
+//tsc AULA-REVISAO.ts --outDir dist  ( cria o .js do arq. no dist)
+//node dist/AULA-REVISAO.js
+
+//OU
+
+//npx tsx AULA-REVISAO.ts ( não cria o .js no dist , roda o binario do tsx)
+
 
 // COMO
 type Carro = {

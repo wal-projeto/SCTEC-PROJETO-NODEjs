@@ -1,8 +1,30 @@
-// dados de um servidor, eles chegam como texto (String).
+/** 
+ * npm i -D tsx  <<-- serve para instalar o pacote tsx como dependência de desenvolvimento no seu projeto.
+ * - É uma ferramenta que permite rodar arquivos TypeScript diretamente com o Node.js, sem precisar compilar manualmente com tsc.
+ *  - Ele também suporta ESM (ECMAScript Modules) e watch mode para recarregar automaticamente quando você salva alterações.
+ *  - Funciona como um substituto moderno para o antigo ts-node.
+ * - npm i : comando para instalar / -D : salva como depend. de desenvolvimento, não em produção / tsx: o pacote
+ * No package.json configuramos: 
+"scripts": {
+  "dev": "tsx --watch src/api.ts",
+  "start": "node dist/api.js",
+  "build": "tsc"
+}
+dev → roda direto o TypeScript com recarregamento automático.
+start → roda a versão compilada
+build → compila para dist.
 
-import { error } from "console";
 
-//  crases (`) para envolver o texto.
+// PARA EXECUTAR  O ARQUIVO:
+COMPILAR MANUALMENTE, POIS NAO ESTA CONFIGURADO NO tsconfig e no package.json
+tsc AULA-20-05.ts --outDir dist
+node dist/AULA-20-05.js
+OU
+npx tsx AULA-20-05.ts - roda o binario do tsx do node_modules sem criar o js
+*/
+
+import { error } from 'console';
+// dados de um servidor, eles chegam como texto (String).crases (`) para envolver o texto. 
 const usuarioJsonTexto = `{
   "nome": "João Silva",
   "idade": 28,
@@ -24,7 +46,7 @@ const lista1: Array<number> = [1, 2, 3, 4];
 
 // DECLARANDO UM OBJETO COM TIPAGEM DIRETA:
 const pessoa: { nome: string; idade: number } = {
-  nome: "wal",
+  nome: 'wal',
   idade: 20,
 };
 console.log(typeof pessoa);
@@ -41,7 +63,7 @@ class casa {
   }
 }
 
-const modelagem = new casa("amarela", 4);
+const modelagem = new casa('amarela', 4);
 console.log(modelagem);
 console.log(typeof modelagem);
 
@@ -52,7 +74,7 @@ type Pessoa = {
 };
 
 const user: Pessoa = {
-  nome1: "walquiria",
+  nome1: 'walquiria',
   idade: 49,
 };
 console.log(typeof user);
@@ -64,59 +86,58 @@ const pessoa2: any = {};
 
 const stringOrNumber: number | string | boolean = 10;
 
-
-
 // TIPO unknown - Desconhecido - Nós dicemos para o Type Script que não sabemos o que tem ali, mas ele não vai desistir e
 // vai ficar tentando/validar a variável - se CHAMA NARROW TYPE
 
 const desconhecido: unknown = JSON.parse('{"nome": "Marcelo"}'); // declaramos unknown mas atribuimos a variável um JavaScript Object Notation (JSON) string
-if (typeof desconhecido === "string") {
+if (typeof desconhecido === 'string') {
   // se o tipo desconhecido foi igual a uma string:
   desconhecido.toLocaleUpperCase(); // transforma ela em MAIUSCULAS
   console.log(desconhecido);
 }
 console.log(desconhecido); // SE NÃO imprime a variável
 console.log(typeof desconhecido); // OBSERVAMOS QUE É DO TIPO OBJECT, MAS VAMOS TESTAR TODAS AS VARIÁVES
-if(typeof desconhecido === 'object'){  // se o tipo de desconhecido for objetc
-    if(desconhecido !== null && 'nome' in desconhecido){ //  e se desconhecido nao for nulo e se a chave nome estiver nele:
-        if(typeof desconhecido.nome === 'string'){  //se a chave nome foi uma string:
-        console.log(desconhecido.nome); // imprime o valor da chave
-        }
+if (typeof desconhecido === 'object') {
+  // se o tipo de desconhecido for objetc
+  if (desconhecido !== null && 'nome' in desconhecido) {
+    //  e se desconhecido nao for nulo e se a chave nome estiver nele:
+    if (typeof desconhecido.nome === 'string') {
+      //se a chave nome foi uma string:
+      console.log(desconhecido.nome); // imprime o valor da chave
     }
-};
-
+  }
+}
 
 const desconhecido1: unknown = true; // declaramos unknown mas atribuimos a variável um JavaScript Object Notation (JSON) string
-if (typeof desconhecido1 === "boolean") {
+if (typeof desconhecido1 === 'boolean') {
   console.log(desconhecido1);
 }
 console.log(!desconhecido1); // SE NÃO imprime a variável
 console.log(typeof desconhecido);
 
+// OBS:  TYPE SCRIPT VALIDA TIPOS , MAS OS TESTES UNITARIOS VALIDÃO OS TIPOS E OS COMPORTAMENTOS
 
-// OBS:  TYPE SCRIPT VALIDA TIPOS , MAS OS TESTES UNITARIOS VALIDÃO OS TIPOS E OS COMPORTAMENTOS 
-
-
-// UM TIPO MAPEADO: é um tipo genérico que usa uma união de PropertyKeytipos (frequentemente criados por meio de um 
-// operador de ordenaçãokeyof ) para iterar pelas chaves e criar um tipo( O TYPESCRIPT TEM UMA SINTAXE PROPRIA PARA PODERMOS 
+// UM TIPO MAPEADO: é um tipo genérico que usa uma união de PropertyKeytipos (frequentemente criados por meio de um
+// operador de ordenaçãokeyof ) para iterar pelas chaves e criar um tipo( O TYPESCRIPT TEM UMA SINTAXE PROPRIA PARA PODERMOS
 // CRIAR TIPOS) :
 
-type flagCriada = {  // Definindo um tipo de objeto com 2 chaves literais, o valor são string
-    MOSTRAR_LOGS: 'MOSTRAR LOGS'
-    RODAR_EM_BACKGROUND: 'RODAR EM BACKGROUND',
-    // MODO_ESCURO: 'MODO ESCURO <- Se eu incluir mais essa propriedade, ela sera mapeada automaticamento.
-}
+type flagCriada = {
+  // Definindo um tipo de objeto com 2 chaves literais, o valor são string
+  MOSTRAR_LOGS: 'MOSTRAR LOGS';
+  RODAR_EM_BACKGROUND: 'RODAR EM BACKGROUND';
+  // MODO_ESCURO: 'MODO ESCURO <- Se eu incluir mais essa propriedade, ela sera mapeada automaticamento.
+};
 
 // keyof
 type OptionsFlags<Type> = {
   [Property in keyof Type]: boolean; // É UM For E DIZ: Para cada propriedade kEY de flagCriada adicione a O TIPO BOOLEANO
 };
 
-type Flagsboleana = OptionsFlags <flagCriada>
+type Flagsboleana = OptionsFlags<flagCriada>;
 const flags: Flagsboleana = {
-    MOSTRAR_LOGS: true,
-    RODAR_EM_BACKGROUND: false,
-}
+  MOSTRAR_LOGS: true,
+  RODAR_EM_BACKGROUND: false,
+};
 /**
  * Explicação
 1. flagCriada: Este é um tipo que define duas propriedades:
@@ -150,23 +171,22 @@ Flagsboleana: Aplica OptionsFlags ao tipo flagCriada, resultando em um tipo onde
 flags: é do tipo Flagsboleana e recebe os valores de suas chaves como boleanos
  */
 
-
 // MARROW TYPE : DESANBIGUAR(RETIRAR AS VARIÁVEIS DO "OU" DO PARÂMETRO) PARA PODER RETORNAR UM VALOR ESPECIFICO PARA CADA UMA DELAS:
 
-function desambiguar(a: String | number | boolean ) {
-    if ( a === 'string'){
-        return a.toLocaleUpperCase
-    }
-    if( a === 'boolean'){
-        return a
-    }
+function desambiguar(a: String | number | boolean) {
+  if (a === 'string') {
+    return a.toLocaleUpperCase;
+  }
+  if (a === 'boolean') {
     return a;
+  }
+  return a;
 }
-console.log(desambiguar("Maranhão"));
+console.log(desambiguar('Maranhão'));
 console.log(desambiguar(true));
 console.log(desambiguar(110));
 
-const b: number | string = 500;  // uma variável tambem pode receber mais tipos
+const b: number | string = 500; // uma variável tambem pode receber mais tipos
 console.log(desambiguar(b));
 
 // OBS: O ERRO É UMA CLASSE/INTERFACE:
@@ -176,10 +196,9 @@ console.log(desambiguar(b));
 
 // Uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any deve retornar um valor:
 // UMA FUNÇÃO PODE RETORNAR TAMBEM MAIS TIPOS , MAS NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR UM DOS VALORES:
-async function http(url: string): Promise <string | Error> {
-
+async function http(url: string): Promise<string | Error> {
   const req = { status: 500 };
-  
+
   // TRANTANDO status para poder retornar ERRO ou SUCESSO
   if (req.status) {
     // Retorna um erro 500
@@ -189,21 +208,21 @@ async function http(url: string): Promise <string | Error> {
     // retorna uma String
     return `returno Sucesso! ${req.status}`;
   }
-  return new Error("Erro Bizarro"); // retorna um Erro
+  return new Error('Erro Bizarro'); // retorna um Erro
 }
 
 // FUNÇÃO MAIN()
-function main(){
-const resultado =   http('google.com.br'); //  retorno pode ser uma String ou um Erro
+function main() {
+  const resultado = http('google.com.br'); //  retorno pode ser uma String ou um Erro
 
-console.log(resultado.toString); // unicas propriedades aceitas para os dois casos de retorno: toString e valueOf
-console.log(resultado.valueOf);
+  console.log(resultado.toString); // unicas propriedades aceitas para os dois casos de retorno: toString e valueOf
+  console.log(resultado.valueOf);
 
-// AGORA SOU OBRIGADO A TRATAR O ERRO, POIS SENÃO NÃO CONSIGO UTILIZAR A STRING:
-if ( typeof resultado !== 'string'){
-    resultado 
-} else{
-    resultado
-}
+  // AGORA SOU OBRIGADO A TRATAR O ERRO, POIS SENÃO NÃO CONSIGO UTILIZAR A STRING:
+  if (typeof resultado !== 'string') {
+    resultado;
+  } else {
+    resultado;
+  }
 }
 main();

@@ -1,29 +1,20 @@
-/** npm run api <-- para rodar o programa
- * OU
- * SE EU MUDAR O SCRIPTS DO PACKAGE.JSON PARA :
- * "scripts": {
-    "start": "node ./src/api.js"
-}
+/**Ctrol + F - Buscar texto no código:
 - Ctrol + c : Libera o  terminal
 - Ctrol + Shift + P = abra a paleta de comandos
 - Ctrol + ' = abre o terminal
+
+GIT:
 - Ao salvar alterações no VS Code subir no GitHub:
  - git add .
  - git commit -m " xxxx "
  - git push origin featureSCTEC
- 
- 1. Garanta que as informações dele estão atualizadas
-git fetch upstream
 
-2. Vá para a sua branch onde quer colocar os arquivos
+git fetch upstream : Garanta que as informações dO repositorio estão atualizadas
+
+MINHAS BRANCHs
 git checkout main
 git checkout featureSCTEC
 git checkout EstudoJavaScript
-
-RODAR COM: npm start
-OU
-RODAR DIRETO PELO TERMINAL:
-node ./src/api.js
 
 Para limpar a rede do seu terminal, execute estes dois comandos no terminal
 do Ubuntu antes de rodar o programa:
@@ -33,14 +24,6 @@ sudo resolvectl flush-caches
 # 2. Desliga o cache de requisições temporárias do Node
 export NODE_OPTIONS=""
 
-textSCTEC-PROJETO-NODEjs/    <-- Raiz do seu projeto
-├── node_modules/   <-- Pasta de dependências (gerada automaticamente)
-├── src/      <-- APENAS seus arquivos de código original
-│   ├── api.ts
-│   └── (outros arquivos .ts)
-├── package.json     <-- Na raiz do projeto
-├── package-lock.json <-- Na raiz do projeto
-└── tsconfig.json    <-- Na raiz do projeto
 
 MINHA TERCEIRA BRANCH COM MATERIAIS DE ESTUDO:
 git push -u origin EstudoJavaScript
@@ -54,11 +37,11 @@ git stash <- Guarde suas alterações atuais
 git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
-api.js RODAR COM: npm start  -> funciona porque no package.json script : {'start: node dist/api.js}
 
-Buscar texto no código: Ctrol + F
+npm run dev → roda direto o TypeScript e recompila automaticamente ao salvar: tsx --watch src/api.ts
+npm run build → só compila: gera os arquivos em dist.
+npm start → compila tudo e roda o proj.principal em dist/src/api.js. "start": "tsc && node dist/src/api.js",
 
-COM TYPESCRIPT : npm run dev -> so funciona se o script dev existir
 */
 export {};
 //# sourceMappingURL=api.d.ts.map

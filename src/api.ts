@@ -38,10 +38,14 @@ git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
 
-npm run dev → roda direto o TypeScript e recompila automaticamente ao salvar.
-npm run build → gera os arquivos em dist.
-npm start → compila e roda a versão final em dist/api.js. script : {'start: node dist/api.js}
+npm run dev → roda direto o TypeScript e recompila automaticamente ao salvar: Usa  tsx --watch src/api.ts
+npm run build → só compila: gera os arquivos em dist.
+npm start  -> sem ficar 'watch' . compila tudo e roda o dist/api.js. "start": "tsc && node dist/src/api.js",
 
+npx tsx src/api.ts → roda só uma vez!! Executa o arquivo direto, sem compilar para dist.
+Útil para testes rápidos ou rodar apenas uma vez sem watch.
+Não gera arquivos .js no dist.
+npx executa binario tsx que esta dentro de node_modules
 */
 
 import { stdin, stdout } from 'process';

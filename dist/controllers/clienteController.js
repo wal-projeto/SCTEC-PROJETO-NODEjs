@@ -42,7 +42,6 @@ export async function usuarioEspecifico(interfaceConsole) {
                 name: usuarioEncontrado.name || "Não informado!"
             };
             console.log(JSON.stringify(dadosExibicao, null, 2));
-            console.log("=================================");
         }
     }
 }
