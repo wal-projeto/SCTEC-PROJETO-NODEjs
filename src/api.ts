@@ -46,6 +46,10 @@ npx tsx src/api.ts → roda só uma vez!! Executa o arquivo direto, sem compilar
 Útil para testes rápidos ou rodar apenas uma vez sem watch.
 Não gera arquivos .js no dist.
 npx executa binario tsx que esta dentro de node_modules
+
+
+
+// npx tsc --noEmit : CHECA ERROS, exatamente em qual arquivo e linha o erro ocorre.
 */
 
 import { stdin, stdout } from 'process';

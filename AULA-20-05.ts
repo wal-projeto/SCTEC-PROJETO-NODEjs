@@ -21,7 +21,7 @@ tsc AULA-20-05.ts --outDir dist
 node dist/AULA-20-05.js
 OU
 npx tsx AULA-20-05.ts - roda o binario do tsx do node_modules sem criar o js
-*/
+---------------------------------------------------------------*/
 
 import { error } from 'console';
 // dados de um servidor, eles chegam como texto (String).crases (`) para envolver o texto. 
@@ -39,6 +39,8 @@ console.log(Obj);
 const texto = JSON.stringify(Obj);
 console.log(texto);
 
+// ------------------------------------------------
+
 // DECLARAÇÃO DE UM ARRAY COM TIPAGEM:
 const lista: number[] = [1, 2, 3, 4];
 
@@ -52,7 +54,7 @@ const pessoa: { nome: string; idade: number } = {
 console.log(typeof pessoa);
 console.log(pessoa);
 
-//OU CRIAMDO UM OBJETO ATRAVES DE UMA CLASSE
+// CRIAMDO UM OBJETO ATRAVES DE UMA CLASSE  ============
 class casa {
   cor: string;
   quartos: number;
@@ -67,7 +69,7 @@ const modelagem = new casa('amarela', 4);
 console.log(modelagem);
 console.log(typeof modelagem);
 
-//OU CLIANDO UM TIPO/INTERFACE:
+// TYPE: CRIA QUALQUER ESTRUTURA DE DADOS  =============================
 type Pessoa = {
   nome1: string;
   idade: number;
@@ -80,104 +82,108 @@ const user: Pessoa = {
 console.log(typeof user);
 console.log(user);
 
-// O TiPO ANY SIGNIFICA QUE ENTRA QUALQUER COISA- Vc diz para o Type Script desistir dessa variável e ele faz!
-// É IMPORTANTE TRATAR E ESPECIFICAR O QUE VAI SAI, COM if( )
+// DECLANDO OUTRO TYPE E UTILIZANDO O ANTERIOR =========================
+type Chines = typeof user
+
+const chino = {nome3: "Xanxum", idadae: 30};
+
+console.log(chino);
+
+//=====================================
+
+// O TiPO ANY SIGNIFICA QUE ENTRA QUALQUER COISA- MAS TEMOS QUE FAZER IF PARA SAIR UM VALOR - O TS não vai tentar validar
 const pessoa2: any = {};
 
-const stringOrNumber: number | string | boolean = 10;
 
-// TIPO unknown - Desconhecido - Nós dicemos para o Type Script que não sabemos o que tem ali, mas ele não vai desistir e
-// vai ficar tentando/validar a variável - se CHAMA NARROW TYPE
+//===  TIPO UNKNOWN (Desconhecido) - Dizemos ao TS que não sabemos o que tem ali, e ele vai ficar tentando validar - Processo CHAMADO NARROW TYPE
 
-const desconhecido: unknown = JSON.parse('{"nome": "Marcelo"}'); // declaramos unknown mas atribuimos a variável um JavaScript Object Notation (JSON) string
-if (typeof desconhecido === 'string') {
-  // se o tipo desconhecido foi igual a uma string:
-  desconhecido.toLocaleUpperCase(); // transforma ela em MAIUSCULAS
-  console.log(desconhecido);
-}
-console.log(desconhecido); // SE NÃO imprime a variável
-console.log(typeof desconhecido); // OBSERVAMOS QUE É DO TIPO OBJECT, MAS VAMOS TESTAR TODAS AS VARIÁVES
-if (typeof desconhecido === 'object') {
-  // se o tipo de desconhecido for objetc
-  if (desconhecido !== null && 'nome' in desconhecido) {
-    //  e se desconhecido nao for nulo e se a chave nome estiver nele:
-    if (typeof desconhecido.nome === 'string') {
-      //se a chave nome foi uma string:
-      console.log(desconhecido.nome); // imprime o valor da chave
+// AS VEZES VEM UM OBJETO, ONDE TEM A PROPRIEDADE NOME E QUEREMOS A PROPRIEDADE NOME DESSE OBJETO:
+// declaramos unknown porque nao sabemos o que pode vir, mas para testar vamos atribuir um JavaScript Object Notation(JSON-string) 
+const desc: unknown = JSON.parse('{"nome": "Marcelo"}'); 
+    // se o tipo desc foi uma string:
+  if (typeof desc === 'string') {
+    desc.toLocaleUpperCase(); // transforma ela em MAIUSCULAS
+    console.log(desc);
+  }
+console.log(desc); // SE NÃO FOR UMA STRING imprime a variável, que no caso é um OBJETO!
+
+console.log(typeof desc); // Comando para verificar o tipo
+
+// MAS: um objeto pode ser nulo, entao temos que verificar isso também:
+if (typeof desc === 'object' && desc !== null) {
+  // agora vamos verificar se a chave nome existe no desc
+  if ('nome' in desc) {
+    //  Agora verificamos de o valor da chave nome é uma String:
+    if (typeof desc.nome === 'string') {
+      console.log(desc.nome); // imprime o valor da chave
     }
   }
 }
 
-const desconhecido1: unknown = true; // declaramos unknown mas atribuimos a variável um JavaScript Object Notation (JSON) string
-if (typeof desconhecido1 === 'boolean') {
-  console.log(desconhecido1);
+
+// =======  OUTRO EXEMPLO: declaramos unknown mas atribuimos a variável um boleano para validar:
+const desc1: unknown = true; 
+if (typeof desc1 === 'boolean') {
+  console.log(desc1);
 }
-console.log(!desconhecido1); // SE NÃO imprime a variável
-console.log(typeof desconhecido);
+console.log(!desc1); // SE NÃO imprime a variável
+console.log(typeof desc);
 
-// OBS:  TYPE SCRIPT VALIDA TIPOS , MAS OS TESTES UNITARIOS VALIDÃO OS TIPOS E OS COMPORTAMENTOS
+// OBS:  TYPE SCRIPT VALIDA TIPOS, MAS OS "TESTES UNITARIOS" VALIDÃO OS TIPOS E OS COMPORTAMENTOS
 
-// UM TIPO MAPEADO: é um tipo genérico que usa uma união de PropertyKeytipos (frequentemente criados por meio de um
-// operador de ordenaçãokeyof ) para iterar pelas chaves e criar um tipo( O TYPESCRIPT TEM UMA SINTAXE PROPRIA PARA PODERMOS
-// CRIAR TIPOS) :
 
+
+// NO MANUAL, NO TÓPICO, MANIPULAÇÃO DE TIPOS TEMOS: 
+//  - Criando tipos a partir de tipos / Genériocos /  Operador de tipo de chave / Tipo de operador de tipo /  
+// Tipos de acesso indexado /  Tipos condicionais /  Tipos Mapeados / Tipos de literais de modelo.
+
+// ======== VAMOS FALAR DOS TIPOS MAPEADOS: ======
+// UM TIPO MAPEADO: é um tipo genérico que usa uma união de PropertyKeytipos (frequentemente criados por meio de um operador
+// de ordenação keyof) para iterar pelas chaves e criar um novo tipo nelas( O TS TEM A SINTAXE PROPRIA PARA CRIAR NOVOS TIPOS):
+
+// EXEMPLO: Definindo um TYPE objeto com 2 chaves literais do tipo string:
 type flagCriada = {
-  // Definindo um tipo de objeto com 2 chaves literais, o valor são string
   MOSTRAR_LOGS: 'MOSTRAR LOGS';
   RODAR_EM_BACKGROUND: 'RODAR EM BACKGROUND';
-  // MODO_ESCURO: 'MODO ESCURO <- Se eu incluir mais essa propriedade, ela sera mapeada automaticamento.
+  //MODO_ESCURO: 'MODO ESCURO <- Se eu incluir mais essa propriedade, ela será mapeada automaticamento.
 };
 
-// keyof
+// ESSE É O ALGORITMO QUE PEGA UM TIPO E CRIA UM NOVO:
 type OptionsFlags<Type> = {
-  [Property in keyof Type]: boolean; // É UM For E DIZ: Para cada propriedade kEY de flagCriada adicione a O TIPO BOOLEANO
+  [Property in keyof Type]: boolean; // É UM For E DIZ: Para cada propriedade kEY(chave) de flagCriada adicione o TIPO BOOLEANO
 };
 
+// DECLARANDO O NOVO TIPO BASEADO NO TIPO flagCriada, MAS COM SEU TIPO ALTERADO, POIS AS CHAVES AGORA TEM VALOR BOLEANO
 type Flagsboleana = OptionsFlags<flagCriada>;
+
+// AGORA PODEMOS DECLARAR UM NOVO OBJETO COM ESSE NOVO FORMATO chave: boleano
 const flags: Flagsboleana = {
   MOSTRAR_LOGS: true,
   RODAR_EM_BACKGROUND: false,
 };
-/**
- * Explicação
-1. flagCriada: Este é um tipo que define duas propriedades:
-MOSTRAR_LOGS: Uma string literal 'MOSTRAR LOGS'.
-RODAR_EM_BACKGROUND: Uma string literal 'RODAR EM BACKGROUND'.
-- Essas propriedades são usadas para criar um tipo de objeto com chaves específicas.
-2. OptionsFlags<Type>:
-Este é um tipo genérico que aceita um tipo Type como parâmetro.
-Ele usa uma sintaxe de mapeamento de tipos ([Property in keyof Type]) para iterar sobre todas as chaves do tipo Type.
-Para cada chave (Property) no tipo Type, ele define uma propriedade no novo tipo com o mesmo nome, mas com o tipo boolean.
-Isso significa que cada chave do tipo Type será convertida em uma chave com o tipo boolean no novo tipo.
-3. Flagsboleana:
-Este é um tipo que utiliza OptionsFlags com flagCriada como argumento.
-Ele aplica o tipo OptionsFlags ao tipo flagCriada, resultando em um tipo onde cada chave de flagCriada é convertida em uma chave com o tipo boolean.
-Portanto, 
-Flagsboleana resulta num tipo com as mesmas chaves de flagCriada, mas todas como boolean.:
-MOSTRAR_LOGS: boolean
-RODAR_EM_BACKGROUND: boolean
 
-ENTAO AO DECLARAR UM OBJETO flags que segue o tipo Flagsboleana, suas propriedades seão booleano:
-
-const flags: Flagsboleana = {
-    MOSTRAR_LOGS: true,
-    RODAR_EM_BACKGROUND: false,
-};
-
+/** 
 4. Resumo:
 flagCriada: Define um tipo de objeto com chaves específicas e valores de string literal.
-OptionsFlags<Type>: Um tipo genérico que converte cada chave de um tipo dado em uma chave com o tipo boolean.
-Flagsboleana: Aplica OptionsFlags ao tipo flagCriada, resultando em um tipo onde cada chave de flagCriada é convertida em uma chave com o tipo boolean.
+OptionsFlags<Type>: Um tipo genérico que converte cada chave de um tipo string em uma chave com o tipo boolean.
+Flagsboleana: Aplica o Algoritimo OptionsFlags ao tipo flagCriada, resultando em um tipo onde cada chave de flagCriada 
+é convertida em uma chave com o tipo boolean.
 flags: é do tipo Flagsboleana e recebe os valores de suas chaves como boleanos
  */
 
-// MARROW TYPE : DESANBIGUAR(RETIRAR AS VARIÁVEIS DO "OU" DO PARÂMETRO) PARA PODER RETORNAR UM VALOR ESPECIFICO PARA CADA UMA DELAS:
 
+// ====== USANDO OU | PARA DIZER QUE UMA VARIÁVEL PODE SER MAIS DE UM TIPO
+const teste: number | string = 10
+
+
+
+// MARROW TYPE : ESTREITAMENTO / DESANBIGUAR(RETIRAR AS VARIÁVEIS DO "OU" DO PARÂMETRO) PARA A FUNÇÃO RETORNAR UM VALOR:
 function desambiguar(a: String | number | boolean) {
-  if (a === 'string') {
+  // VAMOS DESAMBIGUER CADA POSSIBILIDADE QUE "a" PODE ASSUMIR:
+  if (typeof a === 'string') {
     return a.toLocaleUpperCase;
   }
-  if (a === 'boolean') {
+  if (typeof a === 'boolean') {
     return a;
   }
   return a;
@@ -186,36 +192,36 @@ console.log(desambiguar('Maranhão'));
 console.log(desambiguar(true));
 console.log(desambiguar(110));
 
+
+// ==========  OUTRO EXEMPLO:
 const b: number | string = 500; // uma variável tambem pode receber mais tipos
-console.log(desambiguar(b));
+console.log(desambiguar(b)); // USANDO A FUNÇÃO ANTERIOR PARA TRATAR O VALOR 500 QUE ESTOU PASSANDO
 
-// OBS: O ERRO É UMA CLASSE/INTERFACE:
-// clss Error{
-//     message
-// }
 
-// Uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any deve retornar um valor:
-// UMA FUNÇÃO PODE RETORNAR TAMBEM MAIS TIPOS , MAS NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR UM DOS VALORES:
-async function http(url: string): Promise<string | Error> {
+// SE uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any deve retornar um valor: 
+// function test(): string, number, boolen ???
+
+// UMA FUNÇÃO ASYNC "SEMPRE" RETORNAR UM PROMISE QUE PODE SER NESSE CASO string ou Error. 
+// SÓ QUE ISSO NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR UM DOS VALORES PARA A FUNCAO MAIN():
+async function http(url: string): Promise <string | Error> {
   const req = { status: 500 };
-
   // TRANTANDO status para poder retornar ERRO ou SUCESSO
   if (req.status) {
-    // Retorna um erro 500
-    return new Error(`retorno ${req.status}`);
+    return new Error(`Retorno ${req.status}`); // Retorna um erro 500
   }
   if (req.status > 100 && req.status < 399) {
-    // retorna uma String
-    return `returno Sucesso! ${req.status}`;
+    return ` Sucesso! ${req.status}`; // retorna uma String
   }
   return new Error('Erro Bizarro'); // retorna um Erro
 }
 
 // FUNÇÃO MAIN()
+// Passando uma url e o retorno pode ser uma String ou um Erro
 function main() {
-  const resultado = http('google.com.br'); //  retorno pode ser uma String ou um Erro
+  const resultado = http('google.com.br');
 
-  console.log(resultado.toString); // unicas propriedades aceitas para os dois casos de retorno: toString e valueOf
+  // OBSERVE QUE: as unicas propriedades aceitas PARA OS TIPOS string ou erro são toString e valueOf,  por ser COMUNS a eles
+  console.log(resultado.toString);
   console.log(resultado.valueOf);
 
   // AGORA SOU OBRIGADO A TRATAR O ERRO, POIS SENÃO NÃO CONSIGO UTILIZAR A STRING:
@@ -225,4 +231,31 @@ function main() {
     resultado;
   }
 }
+
+
 main();
+// ======== OPERADOR DE DIAMANTE:
+type Pessoa10 = Array <number> // o operador diz o tipo do array
+
+Promise<string | Error>; 
+//PROMISE <string | number>: O operador de dimante represente o retorno dela em caso de SUCESSO ( o sucesso significa 
+// que ela não vai jogar um erro, e no exemplo acima o erro esta dentro do sucesso, ou seja, o retorno que foi 
+// recebino na variável resultado, com isso não vai dar um try/cachet)
+ 
+
+// SO PODEMOS TIPAR NO CASO DE SUCESSO, POR ISSO < string | Error > COM ISSO EVITAMOS QUE CAIA NO CATCH O RETORNO DELA:
+// se eu chamar uma promise sem utilizar um await tenho que fazer um then() porque ele recebe o retorno da promise 
+// quando for sucesso, e o catch recebe o erro, e esse é o padrão:  RETORNAR UM ERRO TIPADO NO SUCESSO. e assim
+// nunca caia no catch, por mais que a promise tenha a tratativa de erro nele. POIS EM PROJETO CRIAMOS CLASSES DE 
+// ERRO, ASSIM PODEMOS DIRECIONAR OS RETORNOS DE ERRO DA TIPAGEM <string | Error> para nossas classes desenvolvidas 
+
+http('google.com.br').then( (sucesso) => {
+   console.log(sucesso)
+}).catch(err => console.log(err))
+// A promise não tipa no caso dela dar erro, por isso que no catch podemos ver que err é igual a any, afinal pode ser
+// qualquer coisa o retorno de erro
+
+// OBSERVAÇÃO : EXISTE 2 TIPOS DE ERROS: 
+// Encerramento de fluxos(a aplicação) : Fatal 
+// Erros trataveis -> com os Retornos , como foi nesse caso acima. Ao criar Classes eu consigo prever e saber que esses
+// erros foram gerados por mim. Caso contrário foi algo não previsto.

@@ -38,10 +38,18 @@ git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
 
-npm run dev → roda direto o TypeScript e recompila automaticamente ao salvar: tsx --watch src/api.ts
+npm run dev → roda direto o TypeScript e recompila automaticamente ao salvar: Usa  tsx --watch src/api.ts
 npm run build → só compila: gera os arquivos em dist.
-npm start → compila tudo e roda o proj.principal em dist/src/api.js. "start": "tsc && node dist/src/api.js",
+npm start  -> sem ficar 'watch' . compila tudo e roda o dist/api.js. "start": "tsc && node dist/src/api.js",
 
+npx tsx src/api.ts → roda só uma vez!! Executa o arquivo direto, sem compilar para dist.
+Útil para testes rápidos ou rodar apenas uma vez sem watch.
+Não gera arquivos .js no dist.
+npx executa binario tsx que esta dentro de node_modules
+
+
+
+// npx tsc --noEmit : Isso vai mostrar exatamente em qual arquivo e linha o erro ocorre.
 */
 import { stdin, stdout } from 'process';
 import { createInterface } from 'node:readline/promises';
