@@ -4,12 +4,12 @@
 - Ctrol + ' = abre o terminal
 
 GIT:
-- Ao salvar alterações no VS Code subir no GitHub:
+- Ao salvar alterações no VS Code e subir no GitHub:
  - git add .
  - git commit -m " xxxx "
  - git push origin featureSCTEC
 
-git fetch upstream : Garanta que as informações dO repositorio estão atualizadas
+git fetch upstream : averiguar utilidade
 
 MINHAS BRANCHs
 git checkout main
@@ -30,10 +30,16 @@ git push -u origin EstudoJavaScript
  * O termo -u origin serve para conectar a sua branch local diretamente com o GitHub. 
  * Nas próximas vezes que quiser enviar alterações dessa branch, bastará digitar apenas:
  * > git push.
+
  * git checkout EstudoJavaScript <-COMANDO PARA IR A ELA
 
 git branch <-lista as branch
-git stash <- Guarde suas alterações atuais
+git stash <- Guarde alterações temporariamente uma pilha, mas nao faz commit ,nem push. Serve para poder mudar de 
+branch sem perder nada. Recupera as mudanças: 
+git stash pop, depois git status para verificar se tem modificações(normalmente ele ja mostra)
+ , git add ., git commit -m "adfa"
+
+
 git switch nome-da-branch <- Mude para a branch desejada
 git stash pop <- git stash pop
 
@@ -54,23 +60,19 @@ npx executa binario tsx que esta dentro de node_modules
 
 import { stdin, stdout } from 'process';
 import { createInterface } from 'node:readline/promises';
-
-
 import { buscarUsuario } from "./repositories/githubRepository.js";
 import { salvarArquivo } from "./services/userServices.js";
 import { usuarioEspecifico } from "./controllers/clienteController.js";
 import { lerArquivo } from "./repositories/fileRepository.js";
 
-
 //const URL_DATABASE = `../database.json`;
 
 async function main(): Promise<void> {
   const interfaceConsole = createInterface({input:stdin, output:stdout});
-  
 
 let escolha = true;
   while (escolha) {
-    // INTERFACE DE USUÁRIO (CLI)
+    //  Função para interação com o usuário
     console.log('===================================================');
     console.log('                  MENU                             ');
     console.log('===================================================');

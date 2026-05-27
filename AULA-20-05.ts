@@ -95,11 +95,13 @@ console.log(chino);
 const pessoa2: any = {};
 
 
-//===  TIPO UNKNOWN (Desconhecido) - Dizemos ao TS que não sabemos o que tem ali, e ele vai ficar tentando validar - Processo CHAMADO NARROW TYPE
+//===  TIPO UNKNOWN (Desconhecido):
+//  Dizemos ao TS que não sabemos o que tem ali, então ele vai ficar tentando validar - Processo CHAMADO NARROW TYPE
 
-// AS VEZES VEM UM OBJETO, ONDE TEM A PROPRIEDADE NOME E QUEREMOS A PROPRIEDADE NOME DESSE OBJETO:
+// IMAGINEMOS QUE RECEBEMOS UM OBJETO, COM UMA PROPRIEDADE NOME E QUEREMOS ACESSAR A PROPRIEDADE NOME DESSE OBJETO:
 // declaramos unknown porque nao sabemos o que pode vir, mas para testar vamos atribuir um JavaScript Object Notation(JSON-string) 
-const desc: unknown = JSON.parse('{"nome": "Marcelo"}'); 
+
+const desc: unknown = JSON.parse('{"nome": "Marcelo"}');  // JSON.parse transfoma o que veio em um Objeto
     // se o tipo desc foi uma string:
   if (typeof desc === 'string') {
     desc.toLocaleUpperCase(); // transforma ela em MAIUSCULAS
@@ -126,11 +128,11 @@ const desc1: unknown = true;
 if (typeof desc1 === 'boolean') {
   console.log(desc1);
 }
-console.log(!desc1); // SE NÃO imprime a variável
+console.log(!desc1); // SE NÃO imprime a variável NEGADA
 console.log(typeof desc);
 
-// OBS:  TYPE SCRIPT VALIDA TIPOS, MAS OS "TESTES UNITARIOS" VALIDÃO OS TIPOS E OS COMPORTAMENTOS
 
+// OBS:  TYPESCRIPT VALIDA TIPOS, MAS OS "TESTES UNITARIOS" VALIDÃO OS TIPOS E OS COMPORTAMENTOS
 
 
 // NO MANUAL, NO TÓPICO, MANIPULAÇÃO DE TIPOS TEMOS: 
@@ -145,7 +147,8 @@ console.log(typeof desc);
 type flagCriada = {
   MOSTRAR_LOGS: 'MOSTRAR LOGS';
   RODAR_EM_BACKGROUND: 'RODAR EM BACKGROUND';
-  //MODO_ESCURO: 'MODO ESCURO <- Se eu incluir mais essa propriedade, ela será mapeada automaticamento.
+  MODO_ESCURO: 'MODO ESCURO';
+  //<- Se eu incluir mais essa propriedade aqui, ela será mapeada automaticamento.
 };
 
 // ESSE É O ALGORITMO QUE PEGA UM TIPO E CRIA UM NOVO:
@@ -160,10 +163,11 @@ type Flagsboleana = OptionsFlags<flagCriada>;
 const flags: Flagsboleana = {
   MOSTRAR_LOGS: true,
   RODAR_EM_BACKGROUND: false,
+  MODO_ESCURO: false,
 };
-
+console.log(flags);
 /** 
-4. Resumo:
+EXPLICAÇÃO:
 flagCriada: Define um tipo de objeto com chaves específicas e valores de string literal.
 OptionsFlags<Type>: Um tipo genérico que converte cada chave de um tipo string em uma chave com o tipo boolean.
 Flagsboleana: Aplica o Algoritimo OptionsFlags ao tipo flagCriada, resultando em um tipo onde cada chave de flagCriada 
@@ -194,20 +198,20 @@ console.log(desambiguar(110));
 
 
 // ==========  OUTRO EXEMPLO:
-const b: number | string = 500; // uma variável tambem pode receber mais tipos
+const b: number | string = 222; // uma variável tambem pode receber mais tipos
 console.log(desambiguar(b)); // USANDO A FUNÇÃO ANTERIOR PARA TRATAR O VALOR 500 QUE ESTOU PASSANDO
 
 
-// SE uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any deve retornar um valor: 
+// SE uma função cujo tipo declarado de saida não seja 'undefined', 'void' nem 'any DEVE retornar um valor: 
 // function test(): string, number, boolen ???
 
-// UMA FUNÇÃO ASYNC "SEMPRE" RETORNAR UM PROMISE QUE PODE SER NESSE CASO string ou Error. 
-// SÓ QUE ISSO NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR UM DOS VALORES PARA A FUNCAO MAIN():
+// UMA FUNÇÃO ASYNC "SEMPRE" RETORNAR UM PROMISE(SUCESSO) QUE NESSE CASO ABAIXO RETORNARÁ uma string ou Error. 
+// SÓ QUE ISSO NOS OBRIGA A FAZER UMA VALIDAÇÃO DEPOIS DE RETORNAR A FUNÇÃO MAIN() O VALORES:
 async function http(url: string): Promise <string | Error> {
   const req = { status: 500 };
-  // TRANTANDO status para poder retornar ERRO ou SUCESSO
+  // TRANTANDO status para poder retornar ERRO ou STRING(AMBOS SÃO CONSIDERADOS SUCESSO)
   if (req.status) {
-    return new Error(`Retorno ${req.status}`); // Retorna um erro 500
+    return new Error(`ERRO: ${req.status}`); // Retorna um erro 500
   }
   if (req.status > 100 && req.status < 399) {
     return ` Sucesso! ${req.status}`; // retorna uma String
@@ -220,20 +224,21 @@ async function http(url: string): Promise <string | Error> {
 function main() {
   const resultado = http('google.com.br');
 
-  // OBSERVE QUE: as unicas propriedades aceitas PARA OS TIPOS string ou erro são toString e valueOf,  por ser COMUNS a eles
+  // OBSERVE QUE: as unicas propriedades aceitas PARA OS TIPOS string e erro são toString e valueOf,  por ser COMUNS a AMBAS
   console.log(resultado.toString);
   console.log(resultado.valueOf);
 
   // AGORA SOU OBRIGADO A TRATAR O ERRO, POIS SENÃO NÃO CONSIGO UTILIZAR A STRING:
   if (typeof resultado !== 'string') {
-    resultado;
+    console.error('Imprimindo o erro', resultado); // imprimi o erro
   } else {
-    resultado;
+    console.log(resultado); // imprimi quando for uma string
   }
 }
+main(); // executando a main()
 
 
-main();
+
 // ======== OPERADOR DE DIAMANTE:
 type Pessoa10 = Array <number> // o operador diz o tipo do array
 
@@ -249,9 +254,17 @@ Promise<string | Error>;
 // nunca caia no catch, por mais que a promise tenha a tratativa de erro nele. POIS EM PROJETO CRIAMOS CLASSES DE 
 // ERRO, ASSIM PODEMOS DIRECIONAR OS RETORNOS DE ERRO DA TIPAGEM <string | Error> para nossas classes desenvolvidas 
 
-http('google.com.br').then( (sucesso) => {
-   console.log(sucesso)
-}).catch(err => console.log(err))
+http('google.com.br')
+  .then((sucesso) => {
+    console.log(sucesso);
+    if (sucesso instanceof Error) {
+      console.log('Erro capturado', sucesso.message);
+      console.log('Pilha de erros', sucesso.stack);
+      console.log('Nome', sucesso.name);
+      //console.log('Cause', sucesso.cause?);
+    }
+  })
+  .catch((err) => console.log(err));
 // A promise não tipa no caso dela dar erro, por isso que no catch podemos ver que err é igual a any, afinal pode ser
 // qualquer coisa o retorno de erro
 

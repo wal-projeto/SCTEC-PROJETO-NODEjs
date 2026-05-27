@@ -13,15 +13,9 @@ export interface Usuario {
   //public_repos?: number;
 }
 
-export interface ErroConexao {
-  name?: string; // Adcionado para o erro AbortError
-  message: string;
-  cause?: {
-    code: string;
-  };
+interface ErrorOptions {
+  cause?: unknown;
 }
+// Assim { cause } bate exatamente com esse tipo, e a propriedade fica acessível via erro.cause nativamente — sem conflito com 
+// a API padrão do Error do ES2022.
 
-export interface ErroArquivo {
-  code?: string;
-  message: string;
-}
