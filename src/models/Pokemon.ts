@@ -1,5 +1,5 @@
 // Estrutura do Pokemon
-import {PokemonInterface} from '../Interfaces/PokemonInterface';
+import {PokemonInterface} from '../Interfaces/PokemonInterface.js';
 
 
 export class Pokemon implements PokemonInterface {

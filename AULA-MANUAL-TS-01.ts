@@ -37,7 +37,7 @@ Ctrl + K seguido de Ctrl + C → comenta o bloco selecionado
 // ----- TYPE SCRIPT PARA PROGRAMADORES JAVA SCRIPT --- https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
 
 // CRIANDO UM OBJETO COM TIPO INFERIDO:
-const user = {
+const user7 = {
   name: "Sofia",
   id: 0
 }
@@ -124,7 +124,7 @@ function processarEntrada(input: string | string[]): number | string {
 }
 
 // Exemplos de uso : O TypeScript garante que, dependendo do argumento, o retorno seja do tipo correto.
-const resultado1 = processarEntrada("Walquiria"); // resultado1: number
+const resultado7 = processarEntrada("Walquiria"); // resultado1: number
 const resultado2 = processarEntrada(["Aula", "TS", "Node"]); // resultado2: string
 
 //Para saber o tipo de uma variável, use typeof:

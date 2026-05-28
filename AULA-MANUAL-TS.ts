@@ -128,7 +128,7 @@ names.forEach((s) => {
 // TIPOS DE OBJETOS:
 // qualquer valor JavaScript com propriedades, ou seja, quase todos! Para definir um tipo objeto, basta listar suas propriedades e seus respectivos tipos.
 // O tipo de cada propriedade também é opcional. Se você não especificar um tipo, será assumido como any.
-function printCoord(pt: { x: number; y }) {
+function printCoord(pt: { x: number; y:number }) {
   console.log("The coordinate's x value is " + pt.x);
   console.log("The coordinate's y value is " + pt.y);
 }

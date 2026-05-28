@@ -16,14 +16,24 @@ build → compila para dist.
 
 
 // PARA EXECUTAR  O ARQUIVO:
+Compilar usando o arquivo como ponto de entrada: Use a flag --project para forçar o TypeScript a ler suas configurações enquanto aponta para o arquivo:
+tsc --project tsconfig.json DESAFIO.ts --outDir dist
+
+Ignorar o aviso explicitamente: Se você não precisa das regras do seu tsconfig.json para esse arquivo específico, adicione a flag sugerida pelo próprio erro:
+tsc DESAFIO.ts --outDir dist --ignoreConfig
+
+Usar o ts-node (Sem gerar arquivos na pasta dist): Se o seu objetivo é apenas executar o arquivo para ver o resultado no terminal sem precisar compilar, use o ts-node:
+npx ts-node DESAFIO.ts
+
+
 COMPILAR MANUALMENTE, POIS NAO ESTA CONFIGURADO NO tsconfig e no package.json
-tsc AULA-20-05.ts --outDir dist
+
 node dist/AULA-20-05.js
 OU
-npx tsx AULA-20-05.ts - roda o binario do tsx do node_modules sem criar o js
+npx tsx AULA-20-05.ts <<- roda o binario do tsx do node_modules sem criar o js
 ---------------------------------------------------------------*/
 
-import { error } from 'console';
+
 // dados de um servidor, eles chegam como texto (String).crases (`) para envolver o texto. 
 const usuarioJsonTexto = `{
   "nome": "João Silva",

@@ -31,7 +31,7 @@ const user = {
 
 // depois de intalar o TypeScrip executamos um arquivo assim: tsc hello.ts:
 // Aruivo hello.ts : Esta é uma função de saudação de uso geral de nível industrial:
-function greet(person, date) {
+function greet(person: string, date: undefined) {
   console.log(`Hello ${person}, today is ${date}!`);
 }
 // O TS stá nos avisará que esquecemos de passar um argumento para a greet função
@@ -57,7 +57,7 @@ greet1('Maddison', new Date());
 // Processo downleveling : O TypeScript tem a capacidade de reescrever código de versões mais recentes(COMO ECMAScript 6, ES2015, ES6) para versões mais antigas, como o ECMAScript 3 ou o ECMAScript 5
 // Executar --target es2015  escolhemos uma versão mais recente
 // Portanto, ao executar o TypeScript com `--recent`:  tsc --target es2015 hello.ts  obtemos a seguinte saída:
-function greet3(person, date) {
+function greet3(person: string, date: Date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
 greet3('Maddison', new Date());

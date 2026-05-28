@@ -49,7 +49,7 @@ type Pokemon = {
 }
 
 // criar um novo array apenas com os nomes: (MAP) -> cria um novo array do mesmo tamanho
-function nomes(pokemons: Pokemon) {
+function nomes(pokemons: Pokemon[]) {
     const nomesPokemons = pokemons.map(pok => pok.nome);
     console.log("Array dos Nomes dos Pokemons\n", nomesPokemons);
 
@@ -68,7 +68,7 @@ console.log ("Imprimindo tipo Fogo:\n", apenasFogo(pokemons))
 
 
 // Encontrar o pokemon com id 7 (FIND) -> encontra nenhum(undefined) ou só o primeiro elemento em um array que satisfaça uma condição
-function id_7(pokemons: Pokemon) {
+function id_7(pokemons: Pokemon[]) {
     const encontrar = pokemons.find((pokemon) => pokemon.id == 7);
     console.log("Pokemon com Id=7 encontrado:\n ", encontrar);
 }
@@ -97,7 +97,7 @@ ordenacao(pokemons);
 
 
 // ordenando por id
-function OrdenacaoId(pokemons:Pokemon) {
+function OrdenacaoId(pokemons:Pokemon[]) {
      const pokemonOrdenadosID = pokemons.sort((a,b) => {
        if (a.id === b.id) {
             return 0;

@@ -1,6 +1,5 @@
 // src/services/PokemonService.ts
-import { PokemonInterface } from '../interfaces/PokemonInterface';
-import { Pokemon } from '../models/Pokemon';
+import { Pokemon } from '../models/Pokemon.js';
 
 export class PokemonService {
   private pokemons: Pokemon[] = [];
