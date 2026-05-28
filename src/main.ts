@@ -155,6 +155,7 @@ const pokemonController = new PokemonController();
 async function main() {
     await pokemonController.fetchPokemon('pikachu');
     await pokemonController.fetchPokemon('charmander');
-    pokemonController.listPokemons();
+    await pokemonController.fetchPokemon("bulbasaur");
+    pokemonController.listaPokemonsOrdenada();
 }
 main();

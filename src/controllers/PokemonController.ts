@@ -19,11 +19,21 @@ export class PokemonController {
             throw new CustomError((error as Error).message);
         }
     }
-    listPokemons(): void {
+    listaPokemonsOrdenada(): void {
         const pokemons = this.pokemonService.getPokemons();
-        console.log('Lista de Pokemon');
-        pokemons.forEach((pokemon:Pokemon) => {
-            console.log(`ID: ${pokemon.id} , Nome: ${pokemon.name} , Tipo: ${pokemon.type}`);  
+        const pokemonsOrdenadosID = pokemons.sort((a,b) => {
+            if(a.id === b.id){
+                return 0;
+            }
+            if (a.id > b.id){
+                return 1;
+            }
+            return -1;
+            
         });
+        console.log('Lista de Pokemon');
+        console.log(
+          `ID: ${this.pokemon.id} , Nome: ${pokemon.name.toUpperCase()} , Tipo: ${pokemon.type}`);
+  
     }
 }
