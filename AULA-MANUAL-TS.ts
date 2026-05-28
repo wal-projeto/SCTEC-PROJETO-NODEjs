@@ -8,6 +8,26 @@ Objetos e propriedades adicionais: https://www.typescriptlang.org/docs/handbook/
 Type aliases: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#object-types
 Interfaces e a diferença de type aliases: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#object-types
 Classes, construtores, métodos e modificadores de acesso: https://www.typescriptlang.org/docs/handbook/2/classes.html#class-members
+
+
+tsc nome_arquivo.ts --outDir dist <- DA ERRO!!!  error TS5112: tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.
+- Esse erro ocorre porque o comando tsc desativa o arquivo tsconfig.json automaticamente quando você passa o nome de um arquivo específico (DESAFIO.ts) direto na linha de comando.
+
+Para resolver isso e compilar o seu arquivo aplicando as configurações do projeto, use uma das opções abaixo:
+Solução 1. Compilar usando o arquivo como ponto de entrada:
+Use a flag --project para forçar o TypeScript a ler suas configurações enquanto aponta para o arquivo:
+tsc --project tsconfig.json nome_arquivo.ts --outDir dist
+
+Solução 2: Ignorar o aviso explicitamente
+Se você não precisa das regras do seu tsconfig.json para esse arquivo específico, adicione a flag sugerida pelo próprio erro:
+tsc nome_arquivo.ts --outDir dist --ignoreConfig
+
+Solução 3: Usar o ts-node (Sem gerar arquivos na pasta dist)
+Se o seu objetivo é apenas executar o arquivo para ver o resultado no terminal sem precisar compilar, use o ts-node:
+npx ts-node nome_arquivo.ts
+
+
+
 */
 
 
